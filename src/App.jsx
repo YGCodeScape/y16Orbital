@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Root Application Component
  * Initializes the Lenis smooth-scroll runtime and synchronizes it with GSAP's animation ticker.
+ * Exposes Lenis globally (window.__lenis) for smooth scroll-to triggers.
  */
 export default function App() {
   useEffect(() => {
@@ -23,6 +24,9 @@ export default function App() {
       smoothWheel: true,
     });
 
+    // Make lenis accessible globally for programmatic scrolling
+    window.__lenis = lenis;
+
     // 2. Synchronize Lenis scroll positions with ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -34,13 +38,14 @@ export default function App() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      window.__lenis = null;
       lenis.destroy();
       gsap.ticker.remove(handleGsapTick);
     };
   }, []);
 
   return (
-    <div className="relative min-h-screen text-neutral-900">
+    <div className="relative min-h-screen text-neutral-900 selection:bg-neutral-900 selection:text-white">
       {/* Global Y16Orbital Navigation */}
       <Nav />
 

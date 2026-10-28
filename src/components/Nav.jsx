@@ -35,11 +35,14 @@ export default function Nav() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-40 transition-all duration-300 backdrop-blur-md  border-b border-neutral-200/40"
-        style={{ paddingTop: '18px', paddingBottom: '18px', }} >
-        <div className="w-full mx-auto flex items-center justify-between"
-          style={{ paddingLeft: '32px', paddingRight: '32px', }} >
-            
+      <header id="main-nav"
+        className="fixed top-0 left-0 w-full z-40 transition-all duration-300 backdrop-blur-md border-b border-neutral-200/40"
+        style={{ paddingTop: '18px', paddingBottom: '18px' }} 
+      >
+        <div 
+          className="w-full mx-auto flex items-center justify-between"
+          style={{ paddingLeft: '32px', paddingRight: '32px' }}
+        >
           {/* Brand Identity with Abstract Orbit Mark (Left) */}
           <a href="#" className="wordmark flex items-center group select-none gap-[2px]" >
              <span className="font-bold text-[17px] uppercase tracking-[2px] text-neutral-900"> Y16 </span>
@@ -55,14 +58,33 @@ export default function Nav() {
           </a>
 
           {/* Desktop Navigation Links Aligned Right */}
-          <nav className="hidden lg:flex items-center text-[13px] font-medium text-neutral-600 ml-auto"
-            style={{ gap: '28px' }} >
+          <nav 
+            className="hidden lg:flex items-center text-[13px] font-medium text-neutral-600 ml-auto"
+            style={{ gap: '28px' }}
+          >
             {NAV_LINKS.map((link) => (
-              <a key={link.href}
+              <a
+                key={link.href}
                 href={link.href}
                 className="relative inline-flex items-center text-neutral-600 hover:text-black transition-transform duration-200 ease-out origin-bottom-left hover:-translate-y-1 hover:-rotate-3 select-none"
-                style={{ padding: '4px 6px' }} >
-                 {link.label}
+                style={{
+                  paddingTop: '4px',
+                  paddingBottom: '4px',
+                  paddingLeft: '6px',
+                  paddingRight: '6px',
+                }}
+              >
+                {link.hasBadge && (
+                  <span 
+                    className="rounded-full bg-emerald-500 inline-block" 
+                    style={{ 
+                      width: '6px', 
+                      height: '6px',
+                      marginRight: '6px'
+                    }} 
+                  />
+                )}
+                {link.label}
               </a>
             ))}
           </nav>
@@ -134,6 +156,16 @@ export default function Nav() {
                 paddingBottom: '6px',
               }}
             >
+              {link.hasBadge && (
+                <span 
+                  className="rounded-full bg-emerald-500 inline-block" 
+                  style={{ 
+                    width: '8px', 
+                    height: '8px',
+                    marginRight: '12px'
+                  }} 
+                />
+              )}
               {link.label}
             </a>
           ))}
