@@ -3,12 +3,12 @@ import { Menu, X } from 'lucide-react';
 import OrbitLogo from './OrbitLogo';
 
 const NAV_LINKS = [
-  { href: '#get-started', label: 'Get Started' },
-  { href: '#strategy', label: 'Create strategy'},
+  { href: '#showcase', label: 'Showcase' },
+  { href: '#virtual-cast', label: 'Virtual Cast'},
+  { href: '#services', label: 'Services' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#contact', label: 'Contact' },
-  { href: '#solution', label: 'Solution' },
-  { href: '#ecommerce', label: 'E-Commerce' },
+  { href: '#production', label: 'Production' },
+  { href: '#start-a-campaign', label: 'Start a Campaign' },
 ];
 
 /**
@@ -16,7 +16,7 @@ const NAV_LINKS = [
  * - Brand on left, all navigation tags aligned to the right.
  * - Interactive hover rotation: tags tilt slightly upwards when hovered.
  * - Full-screen responsive dropdown menu for mobile devices.
- * - Hybrid styling: Tailwind utilities + explicit inline metrics for padding/margins.
+ * - All responsive breakpoint rules managed externally in media.css.
  */
 export default function Nav() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -37,12 +37,10 @@ export default function Nav() {
     <>
       <header id="main-nav"
         className="fixed top-0 left-0 w-full z-40 transition-all duration-300 backdrop-blur-md border-b border-neutral-200/40"
-        style={{ paddingTop: '18px', paddingBottom: '18px' }} 
+        style={{ paddingTop: '18px', paddingBottom: '10px' }} 
       >
-        <div 
-          className="w-full mx-auto flex items-center justify-between"
-          style={{ paddingLeft: '32px', paddingRight: '32px' }}
-        >
+        <div className="w-full mx-auto flex items-center justify-between"
+          style={{ paddingLeft: '32px', paddingRight: '32px' }} >
           {/* Brand Identity with Abstract Orbit Mark (Left) */}
           <a href="#" className="wordmark flex items-center group select-none gap-[2px]" >
              <span className="font-bold text-[17px] uppercase tracking-[2px] text-neutral-900"> Y16 </span>
@@ -57,23 +55,14 @@ export default function Nav() {
              </span>
           </a>
 
-          {/* Desktop Navigation Links Aligned Right */}
-          <nav 
-            className="hidden lg:flex items-center text-[13px] font-medium text-neutral-600 ml-auto"
-            style={{ gap: '28px' }}
-          >
+          {/* Desktop Navigation Links Aligned Right (responsive styles in media.css) */}
+          <nav className="nav-desktop-links items-center text-[13px] font-medium text-neutral-600 ml-auto"
+            style={{ gap: '28px' }} >
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
+              <a key={link.href}
                 href={link.href}
-                className="relative inline-flex items-center text-neutral-600 hover:text-black transition-transform duration-200 ease-out origin-bottom-left hover:-translate-y-1 hover:-rotate-3 select-none"
-                style={{
-                  paddingTop: '4px',
-                  paddingBottom: '4px',
-                  paddingLeft: '6px',
-                  paddingRight: '6px',
-                }}
-              >
+                className=" relative inline-flex items-center text-neutral-600 hover:text-black transition-transform duration-200 ease-out origin-bottom-left hover:-translate-y-1 hover:-rotate-3 select-none"
+                style={{ paddingTop: '4px', paddingBottom: '4px', paddingLeft: '6px', paddingRight: '6px', }} >
                 {link.hasBadge && (
                   <span 
                     className="rounded-full bg-emerald-500 inline-block" 
@@ -89,8 +78,8 @@ export default function Nav() {
             ))}
           </nav>
 
-          {/* Mobile Menu Icon Button (Visible on screens < lg) */}
-          <div className="lg:hidden flex items-center">
+          {/* Mobile Menu Icon Button (responsive styles in media.css) */}
+          <div className="nav-mobile-btn-wrap items-center">
             <button 
               type="button"
               onClick={() => setIsMobileOpen(true)}
@@ -104,9 +93,9 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* Full-Screen Mobile Dropdown Menu */}
+      {/* Full-Screen Mobile Dropdown Menu (responsive styles in media.css) */}
       <div 
-        className={`fixed inset-0 z-50 bg-[#f8f7f5] flex flex-col justify-between transition-all duration-300 ease-in-out lg:hidden ${
+        className={`nav-mobile-overlay fixed inset-0 z-50 bg-[#f8f7f5] flex-col justify-between transition-all duration-300 ease-in-out ${
           isMobileOpen 
             ? 'opacity-100 pointer-events-auto translate-y-0' 
             : 'opacity-0 pointer-events-none -translate-y-4'
@@ -150,7 +139,7 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileOpen(false)}
-              className="text-2xl sm:text-3xl font-medium tracking-tight text-neutral-800 hover:text-black transition-transform duration-200 ease-out origin-bottom-left hover:-translate-y-1 hover:-rotate-3 inline-flex items-center"
+              className="mobile-nav-link font-medium tracking-tight text-neutral-800 hover:text-black transition-transform duration-200 ease-out origin-bottom-left hover:-translate-y-1 hover:-rotate-3 inline-flex items-center"
               style={{
                 paddingTop: '6px',
                 paddingBottom: '6px',

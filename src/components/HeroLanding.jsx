@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -19,7 +19,7 @@ const HERO_CARD_CONFIG = [
     id: 0,
     title: 'Wild',
     img: '/art/art-7.jpg',
-    targetX: -350,
+    targetX: -330,
     targetY: 16,
     targetRotate: -20,
     heroZIndex: 10,
@@ -107,12 +107,17 @@ export default function HeroLanding() {
 
     // =========================================================================
     // 1. INITIAL RESTING / HIDDEN STATE BEFORE ENTRANCE
+    // Using autoAlpha ensures visibility:hidden, preventing invisible elements
+    // from blocking mouse pointer events on any cards!
     // =========================================================================
-    gsap.set('#main-nav', { y: -30, opacity: 0 });
-    gsap.set('.hero-title-group', { y: 24, opacity: 0 });
-    gsap.set(centerCard, { y: 200, scale: 0.6, rotation: -12, opacity: 0 });
-    gsap.set(flankCards, { x: 0, y: 0, rotation: 0, scale: 0.75, opacity: 0 });
-    gsap.set('.hero-footer-cta, .scroll-down-arrow', { y: 20, opacity: 0 });
+    gsap.set('#main-nav', { y: -30, autoAlpha: 0 });
+    gsap.set('.hero-title-group', { y: 24, autoAlpha: 0 });
+    gsap.set(centerCard, { y: 200, scale: 0.6, rotation: -12, autoAlpha: 0 });
+    gsap.set(flankCards, { x: 0, y: 0, rotation: 0, scale: 0.75, autoAlpha: 0 });
+    gsap.set('.hero-footer-cta, .scroll-down-arrow', { y: 20, autoAlpha: 0 });
+
+    // Section 2 starts completely invisible (autoAlpha: 0 sets visibility: hidden)
+    gsap.set('.sec2-container', { autoAlpha: 0 });
 
     // Set initial hero z-index layering so Delulu is front, wings tuck behind
     cards.forEach((cardEl, i) => {
@@ -120,8 +125,7 @@ export default function HeroLanding() {
     });
 
     // =========================================================================
-    // 2. INTRO TIMELINE (Runs in pristine sequence on first landing)
-    // Sequence: Nav -> Hero Title -> Center Card & Fan-Out -> Footer CTAs
+    // 2. INTRO TIMELINE (Runs in sequence on first landing)
     // =========================================================================
     const introTl = gsap.timeline({
       defaults: { ease: 'power3.out' },
@@ -134,14 +138,14 @@ export default function HeroLanding() {
     // Step 1: Nav slides down
     introTl.to('#main-nav', {
       y: 0,
-      opacity: 1,
+      autoAlpha: 1,
       duration: 0.6,
       ease: 'power2.out',
     })
     // Step 2: Hero title reveals
     .to('.hero-title-group', {
       y: 0,
-      opacity: 1,
+      autoAlpha: 1,
       duration: 0.7,
     }, '-=0.2')
     // Step 3: Delulu rises to center
@@ -149,7 +153,7 @@ export default function HeroLanding() {
       y: -2,
       scale: 1.10,
       rotation: 0,
-      opacity: 1,
+      autoAlpha: 1,
       duration: 1.0,
       ease: 'back.out(1.15)',
     }, '-=0.4')
@@ -159,7 +163,7 @@ export default function HeroLanding() {
       y: (i) => HERO_CARD_CONFIG[i].targetY,
       rotation: (i) => HERO_CARD_CONFIG[i].targetRotate,
       scale: (i) => (HERO_CARD_CONFIG[i].isCenter ? 1.10 : 0.92),
-      opacity: 1,
+      autoAlpha: 1,
       duration: 1.0,
       stagger: 0.04,
       ease: 'power4.out',
@@ -167,7 +171,7 @@ export default function HeroLanding() {
     // Step 5: Subtitle, CTAs, and arrow reveal
     .to('.hero-footer-cta, .scroll-down-arrow', {
       y: 0,
-      opacity: 1,
+      autoAlpha: 1,
       duration: 0.6,
       stagger: 0.1,
     }, '-=0.3');
@@ -183,6 +187,7 @@ export default function HeroLanding() {
 
     // =========================================================================
     // 3. PINNED SCROLL TRIGGER TIMELINE (Hero <-> Section 2)
+    // Uses autoAlpha (opacity + visibility) so inactive sections NEVER block clicks!
     // =========================================================================
     function initScrollTransition() {
       if (scrollTlRef.current) return;
@@ -201,12 +206,12 @@ export default function HeroLanding() {
       scrollTlRef.current = scrollTl;
 
       // ───────────────────────────────────────────────────────────────────────
-      // STAGE A: Hero Copy Exits & Cards Retract into Center Stack (0% -> 30%)
+      // STAGE A: Hero Copy Exits (autoAlpha hides it from pointer hit-testing)
       // ───────────────────────────────────────────────────────────────────────
       scrollTl
         .to('.hero-title-group, .hero-footer-cta, .scroll-down-arrow', {
           y: -40,
-          opacity: 0,
+          autoAlpha: 0,       // Sets opacity: 0 AND visibility: hidden
           duration: 0.7,
           ease: 'power2.inOut',
         })
@@ -223,7 +228,7 @@ export default function HeroLanding() {
         }, '<')
 
       // ───────────────────────────────────────────────────────────────────────
-      // STAGE B: Stack Migrates to Right Column & Section 2 Text Enters (30% -> 60%)
+      // STAGE B: Stack Migrates to Right Column & Section 2 Text Becomes Active
       // ───────────────────────────────────────────────────────────────────────
         .to('.cards-stage-wrapper', {
           x: '20vw',
@@ -231,15 +236,14 @@ export default function HeroLanding() {
           duration: 1.1,
           ease: 'power2.inOut',
         })
-        .fromTo('.sec2-header',
-          { opacity: 0, y: 35 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+        .fromTo('.sec2-container',
+          { autoAlpha: 0, y: 35 },
+          { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
           '<0.2'
         )
 
       // ───────────────────────────────────────────────────────────────────────
       // STAGE C: Cards Fan Out into Diagonal Staircase Cascade (60% -> 95%)
-      // Transitions to strictly sequential z-index so every frame is visible!
       // ───────────────────────────────────────────────────────────────────────
         .to(cards, {
           x: (i) => HERO_CARD_CONFIG[i].stepX,
@@ -250,12 +254,7 @@ export default function HeroLanding() {
           duration: 1.1,
           ease: 'power3.out',
           stagger: 0.03,
-        })
-        .fromTo('.sec2-body-group',
-          { opacity: 0, y: 25 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-          '<0.2'
-        );
+        });
 
       ScrollTrigger.refresh();
     }
@@ -277,112 +276,77 @@ export default function HeroLanding() {
   };
 
   return (
-    <section 
-      ref={containerRef}
-      className="relative h-screen w-full overflow-hidden select-none bg-[#f8f7f5]"
+    <section ref={containerRef}
+      className="herolandsec relative h-screen w-full overflow-hidden select-none"
       style={{
         paddingTop: '90px',
         paddingBottom: '36px',
-        paddingLeft: '20px',  // Reduced padding for optimal staircase breathing room
+        paddingLeft: '20px',
         paddingRight: '20px',
       }}
     >
       {/* =================================================================== */}
       {/* SECTION 1: HERO CONTENT                                             */}
       {/* =================================================================== */}
-      <div className="hero-title-group absolute top-24 left-0 w-full text-center z-20 pointer-events-none">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-medium tracking-tight text-neutral-900 leading-[1] capitalize">
-          <span className="hero-prefix inline-block">A place to</span>{' '}
-          <span className="hero-suffix inline-block">display your masterpiece.</span>
+      <div className="hero-title-group absolute top-18 left-0 w-full text-center z-10 pointer-events-none">
+        <h1 className="hero-headline-text font-medium tracking-tight text-neutral-900 capitalize">
+          <span className="hero-prefix inline-block uppercase">The future of advertising,</span><br />
+          <span className="hero-suffix inline-block uppercase">built without cameras.</span>
         </h1>
       </div>
 
-      <div 
-        className="hero-footer-cta opacity-0 absolute bottom-16 left-0 w-full flex flex-col items-center z-20 pointer-events-auto text-center"
-        style={{ gap: '16px' }}
-      >
-        <p 
-          className="text-xs sm:text-sm text-neutral-500 leading-relaxed max-w-md"
-          style={{ paddingLeft: '16px', paddingRight: '16px' }}
-        >
-          Artists can display their masterpiece, and voters can vote to their favorite artist and make them hold the top positions on Y16Orbital.
+      {/* Hero Footer CTA: High z-index (z-40) so buttons are 100% clickable */}
+      <div className="hero-footer-cta opacity-0 absolute left-1/2 -translate-x-1/2 flex flex-col items-center z-40 text-center pointer-events-auto"
+        style={{ gap: '6px' }}>
+        <p className=" hero-subtitle-text text-neutral-500 leading-relaxed">
+          Y16Orbital is a synthetic ad studio replacing multi-million dollar shoots with custom generative intelligence. Tailored AI actors, surreal product staging, and cinematic posters on demand.
         </p>
-        <div 
-          className="flex items-center"
-          style={{ gap: '16px', marginTop: '4px' }}
-        >
+
+        <div className="flex items-center" style={{ gap: '16px', marginTop: '4px' }}>
           <button 
             type="button"
-            className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
-            style={{
-              paddingTop: '10px',
-              paddingBottom: '10px',
-              paddingLeft: '24px',
-              paddingRight: '24px',
-            }}
+            className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer pointer-events-auto"
+            style={{ padding: '10px 24px' }}
           >
-            Find the Designers
+            Explore Showroom
           </button>
           
+          {/* CLICKABLE SCROLL-DOWN ARROW TRIGGER: Placed at high z-index (z-40) */}
           <button 
             type="button"
-            className="text-neutral-600 hover:text-neutral-900 text-xs font-medium tracking-wide transition hover:underline cursor-pointer"
-            style={{
-              paddingTop: '10px',
-              paddingBottom: '10px',
-              paddingLeft: '16px',
-              paddingRight: '16px',
-            }}
+            onClick={handleScrollToSection2}
+            aria-label="Scroll to next section"
+            className="w-8 h-8 rounded-full border border-neutral-300 hover:border-black bg-white/70 backdrop-blur-sm flex items-center justify-center text-neutral-600 hover:text-black transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer animate-bounce pointer-events-auto"
           >
-            Read more
+            <ChevronDown className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* CLICKABLE SCROLL-DOWN ARROW TRIGGER */}
-      <div className="scroll-down-arrow opacity-0 absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-auto">
-        <button
-          type="button"
-          onClick={handleScrollToSection2}
-          aria-label="Scroll to next section"
-          className="w-8 h-8 rounded-full border border-neutral-300 hover:border-black bg-white/70 backdrop-blur-sm flex items-center justify-center text-neutral-600 hover:text-black transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer animate-bounce"
-        >
-          <ChevronDown className="w-4 h-4" />
-        </button>
-      </div>
-
       {/* =================================================================== */}
-      {/* SECTION 2: E-COMMERCE MARKETPLACE CONTENT                           */}
+      {/* SECTION 2: SYNTHETIC PRODUCTION / E-COMMERCE CONTENT                */}
+      {/* Responsive layout rules managed in media.css                       */}
       {/* =================================================================== */}
       <div 
-        className="absolute left-6 md:left-14 top-1/2 -translate-y-1/2 max-w-md z-30 pointer-events-auto"
+        className="sec2-container sec2-container-layout opacity-0 absolute z-40 pointer-events-auto"
         style={{ paddingRight: '20px' }}
       >
-        {/* Category Tag & Main Headline */}
-        <div className="sec2-header opacity-0">
-          <span 
-            className="text-[11px] uppercase tracking-widest text-neutral-400 font-semibold block"
-            style={{ marginBottom: '8px' }}
-          >
-            E-Commerce
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-neutral-900 leading-[1.12]">
-            Showcase, Sell, <br />
-            <span style={{ color: '#842323' }}>& acquire arts to</span> <br />
-            our marketplace.
+        {/* Main Headline */}
+        <div>
+          <h2 className="sec2-headline-text font-bold tracking-tight text-neutral-900">
+            Next Gen Advertising<br />
+            <span style={{ color: '#842323' }}>& virtual photo-shoots </span> <br />
+            crafted for your brand.
           </h2>
         </div>
 
         {/* Subtitle & Buttons */}
-        <div className="sec2-body-group opacity-0" style={{ marginTop: '20px' }}>
-          <p className="text-xs sm:text-sm text-neutral-500 leading-relaxed max-w-sm">
-            Curated community where artists and buyers assemble, create affiliation, design together, and discover authentic digital art.
+        <div style={{ marginTop: '20px' }}>
+          <p className="sec2-subtitle-text text-neutral-500 leading-relaxed">
+            Craft hyper-detailed print campaigns, digital billboards, and dynamic commercial visuals. Your brand gets an exclusive synthetic face that never ages, travels, or books another client.
           </p>
 
-          <div 
-            className="flex items-center"
-            style={{ gap: '14px', marginTop: '24px' }}
-          >
+          <div className="sec2-buttons-group flex items-center" style={{ gap: '14px', marginTop: '24px' }} >
             <button 
               type="button"
               className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
@@ -393,7 +357,7 @@ export default function HeroLanding() {
                 paddingRight: '22px',
               }}
             >
-              Explore Artwork
+              Request Treatment
             </button>
             <button 
               type="button"
@@ -405,18 +369,18 @@ export default function HeroLanding() {
                 paddingRight: '14px',
               }}
             >
-              Read more
+              Read Manifesto
             </button>
           </div>
         </div>
       </div>
 
       {/* =================================================================== */}
-      {/* SHARED 7-CARD STAGE (Transforms from Fan-Out into Diagonal Cascade)  */}
+      {/* SHARED 7-CARD STAGE (At z-20 so footer CTAs at z-40 can be clicked) */}
       {/* =================================================================== */}
-      <div className="cards-stage-wrapper absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      <div className="cards-stage-wrapper absolute inset-0 flex items-center justify-center pointer-events-none z-20">
         <div 
-          className="relative flex items-center justify-center pointer-events-auto"
+          className="hero-cards-stage relative flex items-center justify-center pointer-events-auto"
           style={{ width: '200px', height: '270px' }}
         >
           {/* The 7 Interactive Cards */}
@@ -424,7 +388,7 @@ export default function HeroLanding() {
             <div 
               key={card.id}
               ref={(node) => { cardNodesRef.current[index] = node; }}
-              className="absolute origin-bottom cursor-pointer group"
+              className=" card-d absolute origin-bottom cursor-pointer group"
               style={{ 
                 width: '180px',
                 height: '230px',

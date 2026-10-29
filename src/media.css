@@ -1,0 +1,160 @@
+/* ==========================================================================
+   Y16Orbital — Responsive Stylesheet (media.css)
+   Separated into Mobile (max-width: 768px) and Desktop (min-width: 769px).
+   All responsive breakpoints are centralized here for easy tuning.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. MOBILE SCREENS (Phones & Small Tablets: <= 768px)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+
+  /* --- Navigation (Nav.jsx) --- */
+  .nav-desktop-links {
+    display: none !important;
+  }
+
+  .nav-mobile-btn-wrap {
+    display: flex !important;
+  }
+
+  .nav-mobile-overlay {
+    display: flex !important;
+  }
+
+  .mobile-nav-link {
+    font-size: 1.65rem !important;
+    line-height: 1.25 !important;
+  }
+
+  /* --- Hero Section (HeroLanding.jsx) --- */
+  .herolandsec {
+    height: 800px !important;
+  }
+  .hero-headline-text {
+    font-size: 2.15rem !important;
+    line-height: 1.1 !important;
+    padding-left: 12px !important;
+    padding-top: 20px !important;
+    padding-right: 12px !important;
+  }
+
+  .hero-subtitle-text {
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+    max-width: 90vw !important;
+    padding-bottom: 5px;
+  }
+
+  .hero-footer-cta {
+    bottom: 86px !important;
+    width: 92vw !important;
+    max-width: 92vw !important;
+  }
+  .card-d {
+    width: 250px !important;
+    height: 350px !important;
+  }
+
+  /* Scale down the 7-card deck on mobile so it fits screen width */
+  .hero-cards-stage {
+    transform: scale(0.68) !important;
+    transform-origin: center center !important;
+    margin-top: 30px !important;
+  }
+
+  /* --- Section 2: Synthetic Production / E-Commerce --- */
+  .sec2-container-layout {
+    left: 16px !important;
+    right: 16px !important;
+    top: 12% !important;
+    transform: none !important;
+    max-width: calc(100% - 32px) !important;
+    text-align: center !important;
+  }
+
+  .sec2-headline-text {
+    font-size: 1.75rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .sec2-subtitle-text {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 90% !important;
+  }
+
+  .sec2-buttons-group {
+    display: none !important;
+    justify-content: center !important;
+  }
+}
+
+/* ==========================================================================
+   2. DESKTOP & LARGER SCREENS (Laptops, Desktops: >= 769px)
+   ========================================================================== */
+@media screen and (min-width: 769px) {
+
+  /* --- Navigation (Nav.jsx) --- */
+  .nav-desktop-links {
+    display: flex !important;
+  }
+
+  .nav-mobile-btn-wrap {
+    display: none !important;
+  }
+
+  .nav-mobile-overlay {
+    display: none !important;
+  }
+
+  /* --- Hero Section (HeroLanding.jsx) --- */
+  .hero-headline-text {
+    font-size: 3.25rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .hero-subtitle-text {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    max-width: 32rem !important;
+  }
+
+  .hero-footer-cta {
+    bottom: 16px !important;
+    width: max-content !important;
+    max-width: 32rem !important;
+  }
+
+  .hero-cards-stage {
+    transform: scale(1) !important;
+    margin-top: 80px !important;
+  }
+
+  /* --- Section 2: Synthetic Production / E-Commerce --- */
+  .sec2-container-layout {
+    left: 56px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    max-width: 28rem !important;
+    text-align: left !important;
+  }
+
+  .sec2-headline-text {
+    font-size: 2.625rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .sec2-subtitle-text {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    max-width: 24rem !important;
+  }
+
+  .sec2-buttons-group {
+    justify-content: flex-start !important;
+  }
+
+}

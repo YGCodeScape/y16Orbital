@@ -11,11 +11,6 @@ html.lenis, html.lenis body {
   height: auto;
 }
 
-*::selection {
-  background: #7928CA;
-  color: #FFFFFF;
-}
-
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
