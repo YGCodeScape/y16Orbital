@@ -53,3 +53,39 @@ body {
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* ==========================================================================
+   Section 3 Inverted Navigation Theme (White Icons & Wordmark)
+   ========================================================================== */
+#main-nav.nav-theme-white {
+  border-bottom-color: rgba(255, 255, 255, 0.14) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+#main-nav.nav-theme-white .wordmark span {
+  color: #ffffff !important;
+}
+
+#main-nav.nav-theme-white .wordmark svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+#main-nav.nav-theme-white .nav-desktop-links a {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+#main-nav.nav-theme-white .nav-desktop-links a:hover {
+  color: #ffffff !important;
+}
+
+#main-nav.nav-theme-white .nav-mobile-btn-wrap button {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+#main-nav.nav-theme-white .nav-mobile-btn-wrap button svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}

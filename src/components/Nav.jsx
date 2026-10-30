@@ -36,8 +36,8 @@ export default function Nav() {
   return (
     <>
       <header id="main-nav"
-        className="fixed top-0 left-0 w-full z-40 transition-all duration-300 backdrop-blur-md border-b border-neutral-200/40"
-        style={{ paddingTop: '18px', paddingBottom: '10px' }} 
+        className="fixed top-0 left-0 w-full z-40 transition-all duration-300 backdrop-blur-[16px] border-b border-neutral-200/40"
+        style={{ paddingTop: '18px', paddingBottom: '10px', }} 
       >
         <div className="w-full mx-auto flex items-center justify-between"
           style={{ paddingLeft: '32px', paddingRight: '32px' }} >

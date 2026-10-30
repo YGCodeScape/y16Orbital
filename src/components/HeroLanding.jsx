@@ -334,16 +334,16 @@ export default function HeroLanding() {
         {/* Main Headline */}
         <div>
           <h2 className="sec2-headline-text font-bold tracking-tight text-neutral-900">
-            Next Gen Advertising<br />
-            <span style={{ color: '#842323' }}>& virtual photo-shoots </span> <br />
-            crafted for your brand.
+            The Future Of<br />
+            <span style={{ color: '#842323' }}>Advertising </span> <br />
+            Without Limits.
           </h2>
         </div>
 
         {/* Subtitle & Buttons */}
         <div style={{ marginTop: '20px' }}>
           <p className="sec2-subtitle-text text-neutral-500 leading-relaxed">
-            Craft hyper-detailed print campaigns, digital billboards, and dynamic commercial visuals. Your brand gets an exclusive synthetic face that never ages, travels, or books another client.
+            camera free campaigns, Virtual talent, Entire worlds crafted around your brand.
           </p>
 
           <div className="sec2-buttons-group flex items-center" style={{ gap: '14px', marginTop: '24px' }} >

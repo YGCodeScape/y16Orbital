@@ -72,12 +72,10 @@
     max-width: calc(100% - 32px) !important;
     text-align: center !important;
   }
-
   .sec2-headline-text {
-    font-size: 1.75rem !important;
-    line-height: 1.15 !important;
+    font-size: 2.625rem !important;
+    line-height: 1 !important;
   }
-
   .sec2-subtitle-text {
     font-size: 0.75rem !important;
     line-height: 1.4 !important;
@@ -89,6 +87,81 @@
   .sec2-buttons-group {
     display: none !important;
     justify-content: center !important;
+  }
+
+  /* --- Section 3: Gateway to Synthetic Talent --- */
+  .sec3-section-root {
+    padding-top: 60px !important;
+    padding-bottom: 70px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .sec3-title-wrap {
+    margin-bottom: 32px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .sec3-main-title {
+    font-size: 2.15rem !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  .sec3-banner-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .sec3-banner-wrap {
+    height: 360px !important;
+    border-radius: 24px !important;
+  }
+
+  .sec3-banner-img {
+    position: absolute !important;
+    top: -15% !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 130% !important;
+    object-fit: cover !important;
+  }
+
+  .sec3-trail-card {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  .sec3-brands-wrap {
+    padding-top: 20px !important;
+  }
+
+  .sec3-brands-title {
+    font-size: 1.6rem !important;
+  }
+
+  .sec3-brands-subtitle {
+    font-size: 0.8rem !important;
+    max-width: 90vw !important;
+    margin-bottom: 28px !important;
+  }
+
+  .sec3-marquee-container {
+    padding-bottom: 2px !important;
+  }
+
+  .sec3-brand-item {
+    gap: 20px !important;
+    margin-right: 20px !important;
+  }
+
+  .sec3-brand-name {
+    font-size: 1.25rem !important;
+  }
+
+  .sec3-brand-dot {
+    font-size: 1rem !important;
   }
 }
 
@@ -143,7 +216,7 @@
   }
 
   .sec2-headline-text {
-    font-size: 2.625rem !important;
+    font-size: 3.625rem !important;
     line-height: 1.12 !important;
   }
 
@@ -157,4 +230,76 @@
     justify-content: flex-start !important;
   }
 
+  /* --- Section 3: Gateway to Synthetic Talent --- */
+  .sec3-section-root {
+    padding-top: 60px !important;
+    padding-bottom: 100px !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+
+  .sec3-title-wrap {
+    margin-bottom: 40px !important;
+  }
+
+  .sec3-main-title {
+    font-size: 3.75rem !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  .sec3-banner-container {
+    max-width: 94vw !important;
+    margin-bottom: 10px !important;
+  }
+
+  .sec3-banner-wrap {
+    height: 560px !important;
+    border-radius: 36px !important;
+  }
+
+  .sec3-banner-img {
+    position: absolute !important;
+    top: -15% !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 130% !important;
+    object-fit: contain !important;
+  }
+
+  .sec3-trail-card {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  .sec3-brands-wrap {
+    padding-top: 32px !important;
+  }
+
+  .sec3-brands-title {
+    font-size: 2.35rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .sec3-brands-subtitle {
+    font-size: 0.95rem !important;
+    max-width: 32rem !important;
+  }
+
+  .sec3-marquee-container {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+
+  .sec3-brand-item {
+    gap: 36px !important;
+    margin-right: 36px !important;
+  }
+
+  .sec3-brand-name {
+    font-size: 1.75rem !important;
+  }
+
+  .sec3-brand-dot {
+    font-size: 1.25rem !important;
+  }
 }

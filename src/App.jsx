@@ -4,14 +4,28 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Nav from './components/Nav';
 import HeroLanding from './components/HeroLanding';
+import Section3Gateway from './components/section3/Section3Gateway';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Root Application Component
- * Initializes the Lenis smooth-scroll runtime and synchronizes it with GSAP's animation ticker.
- * Exposes Lenis globally (window.__lenis) for smooth scroll-to triggers.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * WHY THE GLOBAL DELAYED REFRESH:
+ * HeroLanding uses ScrollTrigger pin (end: +=1600), which inserts 1600px of
+ * virtual scroll space into the document. This happens asynchronously as GSAP
+ * processes the pin after React's first paint.
+ *
+ * Section3Gateway's ScrollTriggers register at the same time (or earlier),
+ * measuring Section 3's DOM position BEFORE the 1600px pin space is added.
+ * As a result, every Section 3 trigger fires 1600px too early — inside Section 2.
+ *
+ * Fix: After ALL components have mounted and all useGSAP hooks have run,
+ * call ScrollTrigger.refresh() with a 350ms timeout. This gives HeroLanding's
+ * pin enough time to fully commit its virtual scroll space into the layout,
+ * and then forces a global recalculation of ALL trigger positions.
+ * ─────────────────────────────────────────────────────────────────────────────
  */
 export default function App() {
   useEffect(() => {
@@ -37,7 +51,15 @@ export default function App() {
     gsap.ticker.add(handleGsapTick);
     gsap.ticker.lagSmoothing(0);
 
+    // 3. Global ScrollTrigger refresh after all components have fully mounted.
+    //    350ms is enough for HeroLanding's pin (+=1600) to register its virtual
+    //    scroll space, so Section 3 triggers recalculate to the correct position.
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 350);
+
     return () => {
+      clearTimeout(refreshTimer);
       window.__lenis = null;
       lenis.destroy();
       gsap.ticker.remove(handleGsapTick);
@@ -52,6 +74,7 @@ export default function App() {
       {/* Main Experience Stream */}
       <main className="w-full">
         <HeroLanding />
+        <Section3Gateway />
       </main>
     </div>
   );
