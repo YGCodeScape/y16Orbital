@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Nav from './components/Nav';
 import HeroLanding from './components/HeroLanding';
 import Section3Gateway from './components/section3/Section3Gateway';
+import Section4Sprout from './components/section4/Section4Sprout';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
@@ -75,6 +76,7 @@ export default function App() {
       <main className="w-full">
         <HeroLanding />
         <Section3Gateway />
+        <Section4Sprout />
       </main>
     </div>
   );

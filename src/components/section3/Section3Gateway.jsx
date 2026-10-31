@@ -9,17 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Section3Gateway Component
- * ─────────────────────────────────────────────────────────────────────────────
- * WHY THE DELAYED REFRESH:
- * HeroLanding uses ScrollTrigger pin (end: +=1600). This pin is registered
- * asynchronously after React's first paint. If Section3Gateway's ScrollTrigger
- * instances calculate their scroll positions before HeroLanding's pin is fully
- * registered, every trigger lands ~1600px too early (i.e. inside Section 2).
- *
- * Fix: Call ScrollTrigger.refresh() inside a requestAnimationFrame so it runs
- * AFTER the browser has fully painted and all other ScrollTrigger instances
- * from HeroLanding are already registered and measured.
- * ─────────────────────────────────────────────────────────────────────────────
+ * Restored original blur & opacity reveal on "Gateway to synthetic talent."
  */
 export default function Section3Gateway() {
   const sectionRef = useRef(null);
@@ -30,26 +20,21 @@ export default function Section3Gateway() {
     if (!sectionRef.current) return;
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 1. NAV THEME TOGGLE
-    // Toggles .nav-theme-white while the top of section 3 is past the nav bar.
-    // All triggers use sectionRef.current as the reference element to ensure
-    // positions are calculated relative to Section 3's actual DOM position.
+    // 1. NAV THEME TOGGLE (turns navbar white inside Section 3)
     // ─────────────────────────────────────────────────────────────────────────
     ScrollTrigger.create({
       id: 'sec3-nav-theme',
       trigger: sectionRef.current,
-      start: 'top+=165% 72px',       // When section top reaches just below the nav bar
-      end: 'top+=220% 72px',      // When section bottom scrolls past the nav bar
+      start: 'top+=165% 72px',
+      end: 'top+=220% 72px',
       toggleClass: {
         targets: '#main-nav',
         className: 'nav-theme-white',
       },
-      // markers: true,
     });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. TITLE REVEAL — "Gateway to synthetic talent."
-    // Trigger is placed on the title element itself, which is inside sectionRef.
+    // 2. WORD-BY-WORD TITLE BLUR & OPACITY REVEAL (RESTORED)
     // ─────────────────────────────────────────────────────────────────────────
     if (titleRef.current) {
       const words = titleRef.current.querySelectorAll('.gateway-reveal-word');
@@ -70,8 +55,8 @@ export default function Section3Gateway() {
           ease: 'power3.out',
           scrollTrigger: {
             id: 'sec3-title-reveal',
-            trigger: titleRef.current,      // Title element inside Section 3
-            start: 'top+=1650px 100%',        // When title top enters 88% down viewport
+            trigger: titleRef.current,
+            start: 'top+=1650px 100%',
             end: 'top+=1650px 100%',
             toggleActions: 'play none none reverse',
           },
@@ -103,18 +88,15 @@ export default function Section3Gateway() {
       );
     }
 
-    // Note: Global ScrollTrigger.refresh() is handled in App.jsx with a 350ms
-    // timeout, ensuring HeroLanding's pin (+=1600) is fully registered before
-    // any Section 3 trigger positions are measured.
-
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef}
+    <section
+      ref={sectionRef}
       className="sec3-section-root relative w-full flex flex-col items-center bg-[#f8f7f5]"
     >
       {/* ─────────────────────────────────────────────────────────────────── */}
-      {/* 1. SECTION 3 PAGE TITLE (Word-by-word reveal)                       */}
+      {/* 1. SECTION 3 PAGE TITLE (Blur & Opacity Reveal)                     */}
       {/* ─────────────────────────────────────────────────────────────────── */}
       <div className="sec3-title-wrap w-full flex justify-center text-center">
         <h2
