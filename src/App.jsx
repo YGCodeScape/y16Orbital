@@ -6,6 +6,7 @@ import Nav from './components/Nav';
 import HeroLanding from './components/HeroLanding';
 import Section3Gateway from './components/section3/Section3Gateway';
 import Section4Sprout from './components/section4/Section4Sprout';
+import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
@@ -77,6 +78,7 @@ export default function App() {
         <HeroLanding />
         <Section3Gateway />
         <Section4Sprout />
+        <Section5WavyShowcase />
       </main>
     </div>
   );
