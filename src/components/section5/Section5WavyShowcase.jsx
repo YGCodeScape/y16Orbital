@@ -98,6 +98,7 @@ export default function Section5WavyShowcase() {
     // 2. HORIZONTAL AUTO-SCROLLING TRACKS (Continuous marquee loop)
     // - Top track: moves Right to Left (xPercent: 0 -> -50)
     // - Bottom track: moves Left to Right (xPercent: -50 -> 0)
+    // Using force3D: true ensures GPU rasterization, eliminating subpixel jitter/lag.
     // ─────────────────────────────────────────────────────────────────────────
     if (topTrackRef.current) {
       gsap.to(topTrackRef.current, {
@@ -105,6 +106,7 @@ export default function Section5WavyShowcase() {
         ease: 'none',
         duration: 38,
         repeat: -1,
+        force3D: true,
       });
     }
 
@@ -117,37 +119,41 @@ export default function Section5WavyShowcase() {
           ease: 'none',
           duration: 38,
           repeat: -1,
+          force3D: true,
         }
       );
     }
 
     // ─────────────────────────────────────────────────────────────────────────
     // 3. VERTICAL SINE-WAVE MOTION (The signature organic wavy wave!)
-    // Each individual card oscillates up and down with an offset phase
+    // Each individual card oscillates up and down with an offset phase.
+    // force3D: true on individual cards prevents micro-stutters and blurry jitter.
     // ─────────────────────────────────────────────────────────────────────────
     const topCards = topCardsRef.current.filter(Boolean);
     topCards.forEach((card, i) => {
       gsap.to(card, {
-        y: -24,
-        rotation: (i % 2 === 0 ? 3 : -3),
-        duration: 2.2 + (i % 3) * 0.3,
+        y: -22,
+        rotation: (i % 2 === 0 ? 2.5 : -2.5),
+        duration: 2.4 + (i % 3) * 0.25,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
         delay: (i * 0.22) % 2.2,
+        force3D: true,
       });
     });
 
     const bottomCards = bottomCardsRef.current.filter(Boolean);
     bottomCards.forEach((card, i) => {
       gsap.to(card, {
-        y: 24,
-        rotation: (i % 2 === 0 ? -3 : 3),
-        duration: 2.4 + (i % 3) * 0.25,
+        y: 22,
+        rotation: (i % 2 === 0 ? -2.5 : 2.5),
+        duration: 2.5 + (i % 3) * 0.25,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
         delay: (i * 0.26) % 2.4,
+        force3D: true,
       });
     });
 
@@ -184,17 +190,21 @@ export default function Section5WavyShowcase() {
             <div
               key={`top-${work.id}-${idx}`}
               ref={(node) => { topCardsRef.current[idx] = node; }}
-              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108"
+              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108 will-change-transform"
               style={{
                 width: '124px',
                 height: '148px',
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
               }}
             >
               <img
                 src={work.img}
                 alt={`AI Campaign Showcase ${work.id}`}
-                className="w-full h-full object-cover select-none"
-                loading="lazy"
+                className="w-full h-full object-cover select-none pointer-events-none"
+                loading="eager"
+                decoding="async"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -266,17 +276,21 @@ export default function Section5WavyShowcase() {
             <div
               key={`bot-${work.id}-${idx}`}
               ref={(node) => { bottomCardsRef.current[idx] = node; }}
-              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108"
+              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108 will-change-transform"
               style={{
                 width: '124px',
                 height: '148px',
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
               }}
             >
               <img
                 src={work.img}
                 alt={`AI Product Showcase ${work.id}`}
-                className="w-full h-full object-cover select-none"
-                loading="lazy"
+                className="w-full h-full object-cover select-none pointer-events-none"
+                loading="eager"
+                decoding="async"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}

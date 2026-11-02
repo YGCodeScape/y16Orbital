@@ -252,9 +252,8 @@ export default function Section4Sprout() {
   }, { scope: containerRef });
 
   return (
-    <section
-      ref={containerRef}
-      className="sec4-sprout-section relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#f8f7f5] select-none"
+    <section ref={containerRef}
+      className="sec4-sprout-section relative w-full min-h-screen flex items-center justify-center overflow-hidden select-none"
       style={{
         paddingTop: '100px',
         paddingBottom: '120px',
