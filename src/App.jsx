@@ -7,7 +7,8 @@ import HeroLanding from './components/HeroLanding';
 import Section3Gateway from './components/section3/Section3Gateway';
 import Section4Sprout from './components/section4/Section4Sprout';
 import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
-// import Section6PerspectiveHero from './components/section6/Section6PerspectiveHero';
+import Section6ProjectShowcase from './components/section6/Section6ProjectShowcase';
+import Section7PerspectiveHero from './components/section7/Section7PerspectiveHero';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
@@ -35,7 +36,7 @@ export default function App() {
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll runtime
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.70,
       easing: (time) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
@@ -125,7 +126,8 @@ export default function App() {
         <Section3Gateway />
         <Section4Sprout />
         <Section5WavyShowcase />
-        {/* <Section6PerspectiveHero /> */}
+        <Section6ProjectShowcase />
+        <Section7PerspectiveHero />
       </main>
     </div>
   );

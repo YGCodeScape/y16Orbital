@@ -194,6 +194,65 @@
     height: 110px !important;
     margin-right: 16px !important;
   }
+
+  /* --- Section 6: Project Showcase --- */
+  .sec6-showcase-section {
+    padding-top: 60px !important;
+    padding-bottom: 72px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .sec6-header-block {
+    margin-bottom: 48px !important;
+  }
+  .sec6-headline {
+    font-size: 2.15rem !important;
+    line-height: 1.15 !important;
+  }
+  .sec6-headline-word {
+    margin-right: 8px !important;
+  }
+  .sec6-row1-grid {
+    gap: 24px !important;
+    margin-bottom: 28px !important;
+  }
+  .sec6-row2-grid {
+    gap: 24px !important;
+  }
+  .sec6-project-card {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+  .sec6-card-stage {
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+  }
+  .sec6-card-eyebrow {
+    margin-bottom: 6px !important;
+  }
+  .sec6-card-title {
+    margin-bottom: 8px !important;
+  }
+  .sec6-card-desc {
+    margin-bottom: 18px !important;
+  }
+  .sec6-card-btn {
+    padding: 8px 16px !important;
+  }
+  .sec6-tags-group {
+    gap: 6px !important;
+  }
+  .sec6-tag-pill {
+    padding: 4px 10px !important;
+  }
+
+  /* --- Section 7: Perspective Hero --- */
+  .sec7-bg-card {
+    width: 90px !important;
+    height: 105px !important;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
 }
 
 /* ==========================================================================
@@ -343,5 +402,64 @@
   .sec4-stack-card {
     width: 185px !important;
     height: 245px !important;
+  }
+
+  /* --- Section 6: Project Showcase --- */
+  .sec6-showcase-section {
+    padding-top: 100px !important;
+    padding-bottom: 120px !important;
+    padding-left: 48px !important;
+    padding-right: 48px !important;
+  }
+  .sec6-header-block {
+    margin-bottom: 80px !important;
+  }
+  .sec6-headline {
+    font-size: 3.5rem !important;
+    line-height: 1.12 !important;
+  }
+  .sec6-headline-word {
+    margin-right: 12px !important;
+  }
+  .sec6-row1-grid {
+    gap: 32px !important;
+    margin-bottom: 40px !important;
+  }
+  .sec6-row2-grid {
+    gap: 32px !important;
+  }
+  .sec6-project-card {
+    padding: 32px !important;
+    border-radius: 24px !important;
+  }
+  .sec6-card-stage {
+    padding: 24px !important;
+    margin-bottom: 24px !important;
+  }
+  .sec6-card-eyebrow {
+    margin-bottom: 6px !important;
+  }
+  .sec6-card-title {
+    margin-bottom: 8px !important;
+  }
+  .sec6-card-desc {
+    margin-bottom: 20px !important;
+  }
+  .sec6-card-btn {
+    padding: 8px 16px !important;
+  }
+  .sec6-tags-group {
+    gap: 8px !important;
+  }
+  .sec6-tag-pill {
+    padding: 4px 10px !important;
+  }
+
+  /* --- Section 7: Perspective Hero --- */
+  .sec7-bg-card {
+    width: 128px !important;
+    height: 144px !important;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 }
