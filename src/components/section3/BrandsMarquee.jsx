@@ -22,11 +22,7 @@ const BRAND_NAMES = [
 
 /**
  * BrandsMarquee Component
- * ─────────────────────────────────────────────────────────────────────────────
- * Same delayed-refresh pattern as Section3Gateway: the brands headline trigger
- * is registered after two rAF frames so that HeroLanding's 1600px pin is
- * already accounted for in ScrollTrigger's measurements.
- * ─────────────────────────────────────────────────────────────────────────────
+ * Natural document-flow element with its own local ScrollTrigger.
  */
 export default function BrandsMarquee() {
   const containerRef = useRef(null);
@@ -36,7 +32,7 @@ export default function BrandsMarquee() {
   useGSAP(() => {
     // ─────────────────────────────────────────────────────────────────────────
     // 1. "Trusted by the best." WORD-BY-WORD REVEAL
-    // Trigger anchored to headlineRef which lives inside sec3-section-root.
+    // Uses local anchor to headlineRef without arbitrary pixel offsets.
     // ─────────────────────────────────────────────────────────────────────────
     if (headlineRef.current) {
       const words = headlineRef.current.querySelectorAll('.brand-reveal-word');
@@ -57,9 +53,8 @@ export default function BrandsMarquee() {
           ease: 'power3.out',
           scrollTrigger: {
             id: 'sec3-brands-reveal',
-            trigger: headlineRef.current,   // Anchored to the headline's DOM position
-            start: 'top+=1700px 100%',        // When title top enters 88% down viewport
-            end: 'top+=1700px 100%',
+            trigger: headlineRef.current,
+            start: 'top 88%',
             toggleActions: 'play none none reverse',
           },
         }
@@ -68,7 +63,7 @@ export default function BrandsMarquee() {
 
     // ─────────────────────────────────────────────────────────────────────────
     // 2. INFINITE SEAMLESS BRAND TICKER
-    // Not tied to scroll position — plays continuously on loop.
+    // Continuous loop independent of scroll progress.
     // ─────────────────────────────────────────────────────────────────────────
     if (marqueeTrackRef.current) {
       gsap.to(marqueeTrackRef.current, {
@@ -78,9 +73,6 @@ export default function BrandsMarquee() {
         repeat: -1,
       });
     }
-
-    // Note: Global ScrollTrigger.refresh() is handled in App.jsx with a 350ms
-    // timeout. No local refresh needed here.
 
   }, { scope: containerRef });
 

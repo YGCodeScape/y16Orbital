@@ -6,7 +6,8 @@ import Nav from './components/Nav';
 import HeroLanding from './components/HeroLanding';
 import Section3Gateway from './components/section3/Section3Gateway';
 import Section4Sprout from './components/section4/Section4Sprout';
-import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
+// import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
+// import Section6PerspectiveHero from './components/section6/Section6PerspectiveHero';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
@@ -14,19 +15,20 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Root Application Component
  * ─────────────────────────────────────────────────────────────────────────────
- * WHY THE GLOBAL DELAYED REFRESH:
- * HeroLanding uses ScrollTrigger pin (end: +=1600), which inserts 1600px of
- * virtual scroll space into the document. This happens asynchronously as GSAP
- * processes the pin after React's first paint.
- *
- * Section3Gateway's ScrollTriggers register at the same time (or earlier),
- * measuring Section 3's DOM position BEFORE the 1600px pin space is added.
- * As a result, every Section 3 trigger fires 1600px too early — inside Section 2.
- *
- * Fix: After ALL components have mounted and all useGSAP hooks have run,
- * call ScrollTrigger.refresh() with a 350ms timeout. This gives HeroLanding's
- * pin enough time to fully commit its virtual scroll space into the layout,
- * and then forces a global recalculation of ALL trigger positions.
+ * PRODUCTION SCROLL & TIMING ARCHITECTURE:
+ * 1. Synchronous Registration:
+ *    ScrollTrigger and Lenis run in a unified ticker loop with zero lag smoothing
+ *    during animation, preventing desync between wheel/touch and GSAP triggers.
+ * 2. Event-Driven Lifecycle Refresh:
+ *    Rather than arbitrary setTimeout values, ScrollTrigger is refreshed on:
+ *    - Initial component paint (requestAnimationFrame)
+ *    - Complete font rendering (`document.fonts.ready`)
+ *    - Full asset / window load (`window.addEventListener('load')`)
+ *    - Window resize with debounce
+ * 3. Strict Cleanup:
+ *    Lenis event handlers are explicitly removed with `lenis.off()`,
+ *    the global reference is verified before clearing, and GSAP's ticker
+ *    lagSmoothing setting is cleanly restored on unmount.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 export default function App() {
@@ -44,27 +46,71 @@ export default function App() {
     window.__lenis = lenis;
 
     // 2. Synchronize Lenis scroll positions with ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+    const handleScroll = () => {
+      ScrollTrigger.update();
+    };
+    lenis.on('scroll', handleScroll);
 
     const handleGsapTick = (time) => {
       lenis.raf(time * 1000);
     };
 
     gsap.ticker.add(handleGsapTick);
+    // Disable lag smoothing while active so Lenis and GSAP match frame-for-frame
     gsap.ticker.lagSmoothing(0);
 
-    // 3. Global ScrollTrigger refresh after all components have fully mounted.
-    //    350ms is enough for HeroLanding's pin (+=1600) to register its virtual
-    //    scroll space, so Section 3 triggers recalculate to the correct position.
-    const refreshTimer = setTimeout(() => {
+    // 3. Event-Driven Layout Refreshes (No arbitrary timeouts)
+    // A. Immediate next-frame refresh once DOM is initially committed
+    const rafId = requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 350);
+    });
 
+    // B. Refresh after web fonts finish loading (critical for text measurement)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
+    }
+
+    // C. Refresh after all media assets and stylesheets have completed loading
+    const handleWindowLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    if (document.readyState === 'complete') {
+      ScrollTrigger.refresh();
+    } else {
+      window.addEventListener('load', handleWindowLoad);
+    }
+
+    // D. Debounced resize refresh for viewport stability
+    let resizeTimer = null;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // 4. Strict Cleanup
     return () => {
-      clearTimeout(refreshTimer);
-      window.__lenis = null;
-      lenis.destroy();
+      cancelAnimationFrame(rafId);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('load', handleWindowLoad);
+      window.removeEventListener('resize', handleResize);
+
+      // Explicit event cleanup
+      lenis.off('scroll', handleScroll);
       gsap.ticker.remove(handleGsapTick);
+
+      // Restore default GSAP lag smoothing
+      gsap.ticker.lagSmoothing(500, 33);
+
+      // Reference checked before clearing
+      if (window.__lenis === lenis) {
+        window.__lenis = null;
+      }
+      lenis.destroy();
     };
   }, []);
 
@@ -78,7 +124,8 @@ export default function App() {
         <HeroLanding />
         <Section3Gateway />
         <Section4Sprout />
-        <Section5WavyShowcase />
+        {/* <Section5WavyShowcase />
+        <Section6PerspectiveHero /> */}
       </main>
     </div>
   );

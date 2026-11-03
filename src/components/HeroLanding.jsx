@@ -2,80 +2,77 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ChevronDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * ─────────────────────────────────────────────────────────────────────────────
- * 7 Cards Configuration Dataset
- * - targetX, targetY, targetRotate: Hero fanned-out arc coordinates.
- * - heroZIndex: Symmetrical card deck layering (Delulu on top, wings tuck behind).
- * - stepX, stepY: Section 2 diagonal staircase cascade coordinates.
- * ─────────────────────────────────────────────────────────────────────────────
+ * 7 Interactive Cards Configuration:
+ * - Card 3 ("Delulu - The Synthetic Face") is the true center anchor.
+ * - Cards 0, 1, 2 fan to the left; Cards 4, 5, 6 fan to the right.
+ * - Target rotation, horizontal/vertical translation, and staircase steps are calibrated.
  */
 const HERO_CARD_CONFIG = [
   {
     id: 0,
-    title: 'Wild',
-    img: '/art/art-7.jpg',
-    targetX: -330,
-    targetY: 16,
-    targetRotate: -20,
-    heroZIndex: 10,
+    title: 'into wild',
+    img: '/art/art-0.jpg',
+    targetX: -360,
+    targetY: 0,
+    targetRotate: -16,
+    heroZIndex: 10, // Tucked behind Soda
     stepX: -255,
     stepY: -90,
   },
   {
     id: 1,
-    title: 'Sound',
+    title: 'Futuristic Soda',
     img: '/art/art-1.jpg',
-    targetX: -230,
-    targetY: 0,
-    targetRotate: -15,
-    heroZIndex: 15,
+    targetX: -240,
+    targetY: -10,
+    targetRotate: -14,
+    heroZIndex: 15, // Tucked behind Luxury Watch
     stepX: -170,
     stepY: -60,
   },
   {
-    id: 3,
-    title: 'Text Poster',
+    id: 2,
+    title: 'Luxury Watch',
     img: '/art/art-2.jpg',
-    targetX: -110,
-    targetY: -12,
-    targetRotate: -14,
-    heroZIndex: 20,
+    targetX: -120,
+    targetY: -14,
+    targetRotate: -7,
+    heroZIndex: 20, // Tucked behind Delulu
     stepX: -85,
     stepY: -30,
   },
   {
-    id: 2,
-    title: 'Delulu',
+    id: 3,
+    title: 'Delulu Synthetic Face',
     img: '/art/art-3.jpg',
     targetX: 0,
     targetY: -2,
     targetRotate: 0,
+    heroZIndex: 30, // Front Center Kingpin
     isCenter: true,
-    heroZIndex: 30, // Front centerpiece
     stepX: 0,
     stepY: 0,
   },
   {
     id: 4,
-    title: 'Nike',
+    title: 'Nike Air Concept',
     img: '/art/art-4.jpg',
-    targetX: 110,
-    targetY: -10,
-    targetRotate: 10,
-    heroZIndex: 20,
+    targetX: 120,
+    targetY: -14,
+    targetRotate: 8,
+    heroZIndex: 20, // Tucked behind Delulu
     stepX: 85,
     stepY: 30,
   },
   {
     id: 5,
-    title: 'Water Glass',
+    title: 'Water Glass Refraction',
     img: '/art/art-5.jpg',
-    targetX: 230,
+    targetX: 240,
     targetY: -10,
     targetRotate: 15,
     heroZIndex: 15, // Tucked behind Nike
@@ -105,16 +102,21 @@ export default function HeroLanding() {
     const centerCard = cards.find((_, i) => HERO_CARD_CONFIG[i].isCenter);
     const flankCards = cards.filter((_, i) => !HERO_CARD_CONFIG[i].isCenter);
 
+    // Explicitly select navigation element outside containerRef scope
+    const mainNav = document.getElementById('main-nav');
+
     // =========================================================================
     // 1. INITIAL RESTING / HIDDEN STATE BEFORE ENTRANCE
     // Using autoAlpha ensures visibility:hidden, preventing invisible elements
     // from blocking mouse pointer events on any cards!
     // =========================================================================
-    gsap.set('#main-nav', { y: -30, autoAlpha: 0 });
+    if (mainNav) {
+      gsap.set(mainNav, { y: -30, autoAlpha: 0 });
+    }
     gsap.set('.hero-title-group', { y: 24, autoAlpha: 0 });
     gsap.set(centerCard, { y: 200, scale: 0.6, rotation: -12, autoAlpha: 0 });
     gsap.set(flankCards, { x: 0, y: 0, rotation: 0, scale: 0.75, autoAlpha: 0 });
-    gsap.set('.hero-footer-cta, .scroll-down-arrow', { y: 20, autoAlpha: 0 });
+    gsap.set('.hero-footer-cta-inner', { y: 20, autoAlpha: 0 });
 
     // Section 2 starts completely invisible (autoAlpha: 0 sets visibility: hidden)
     gsap.set('.sec2-container', { autoAlpha: 0 });
@@ -125,25 +127,102 @@ export default function HeroLanding() {
     });
 
     // =========================================================================
-    // 2. INTRO TIMELINE (Runs in sequence on first landing)
+    // 2. PINNED SCROLL TRIGGER TIMELINE (Hero <-> Section 2)
+    // Rule 2: HeroLanding pins for 1600px of virtual scroll space.
+    // Created immediately during component mount so layout space is locked.
+    // Invalidate() is called when intro completes to dynamically bind starting
+    // coordinates to the fanned-out hero arc without any visual jumps.
+    // =========================================================================
+    const scrollTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top top',
+        end: '+=1600',       // 1600px of virtual scroll travel
+        scrub: 1,            // Smooth manual hand scrubbing
+        pin: true,           // Freeze viewport while cards transform
+        anticipatePin: 1,
+      },
+    });
+
+    scrollTlRef.current = scrollTl;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE A: Hero Copy Exits & Cards Collapse to Center Stack
+    // ─────────────────────────────────────────────────────────────────────────
+    scrollTl
+      .to('.hero-title-group, .hero-footer-cta-inner', {
+        y: -40,
+        autoAlpha: 0,
+        duration: 0.7,
+        ease: 'power2.inOut',
+      })
+      // All 7 cards collapse neatly from their fanned-out positions back to center
+      .to(cards, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 0.85,
+        zIndex: (i) => HERO_CARD_CONFIG[i].heroZIndex,
+        duration: 0.9,
+        ease: 'power2.inOut',
+        stagger: 0.02,
+      }, '<')
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE B: Stack Migrates to Right Column & Section 2 Text Becomes Active
+    // ─────────────────────────────────────────────────────────────────────────
+      .to('.cards-stage-wrapper', {
+        x: '20vw',
+        y: '6vh',
+        duration: 1.1,
+        ease: 'power2.inOut',
+      })
+      .fromTo('.sec2-container',
+        { autoAlpha: 0, y: 35 },
+        { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+        '<0.2'
+      )
+      // Timeline label marking the exact point where Section 2 is fully visible
+      .addLabel('section2')
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE C: Cards Fan Out into Diagonal Staircase Cascade (60% -> 95%)
+    // ─────────────────────────────────────────────────────────────────────────
+      .to(cards, {
+        x: (i) => HERO_CARD_CONFIG[i].stepX,
+        y: (i) => HERO_CARD_CONFIG[i].stepY,
+        rotation: 0,
+        scale: 0.94,
+        zIndex: (i) => 10 + i, // Ascending sequential staircase stacking
+        duration: 1.1,
+        ease: 'power3.out',
+        stagger: 0.03,
+      });
+
+    // =========================================================================
+    // 3. INTRO TIMELINE (Runs in sequence on first landing)
     // =========================================================================
     const introTl = gsap.timeline({
       defaults: { ease: 'power3.out' },
       onComplete: () => {
-        // Initialize ScrollTrigger ONLY after intro is 100% finished
-        initScrollTransition();
+        // Re-read starting DOM values so scrollTl's Stage A starts seamlessly
+        // from the completed fanned-out positions
+        scrollTl.invalidate();
       },
     });
 
     // Step 1: Nav slides down
-    introTl.to('#main-nav', {
-      y: 0,
-      autoAlpha: 1,
-      duration: 0.6,
-      ease: 'power2.out',
-    })
+    if (mainNav) {
+      introTl.to(mainNav, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.6,
+        ease: 'power2.out',
+      });
+    }
+
     // Step 2: Hero title reveals
-    .to('.hero-title-group', {
+    introTl.to('.hero-title-group', {
       y: 0,
       autoAlpha: 1,
       duration: 0.7,
@@ -169,114 +248,42 @@ export default function HeroLanding() {
       ease: 'power4.out',
     }, '-=0.5')
     // Step 5: Subtitle, CTAs, and arrow reveal
-    .to('.hero-footer-cta, .scroll-down-arrow', {
+    .to('.hero-footer-cta-inner', {
       y: 0,
       autoAlpha: 1,
       duration: 0.6,
-      stagger: 0.1,
     }, '-=0.3');
 
-    // If an impatient visitor touches the wheel before intro finishes, snap intro to end
+    // If already scrolled (e.g. browser refresh midway down page), complete intro immediately
+    if (window.scrollY > 20) {
+      introTl.progress(1);
+      scrollTl.invalidate();
+    }
+
+    // If a visitor touches wheel or touch before intro finishes, complete intro cleanly
     const handleEarlyScroll = () => {
       if (introTl.isActive()) {
         introTl.progress(1);
+        scrollTl.invalidate();
       }
     };
-    window.addEventListener('wheel', handleEarlyScroll, { once: true, passive: true });
-    window.addEventListener('touchmove', handleEarlyScroll, { once: true, passive: true });
+    window.addEventListener('wheel', handleEarlyScroll, { passive: true });
+    window.addEventListener('touchmove', handleEarlyScroll, { passive: true });
 
-    // =========================================================================
-    // 3. PINNED SCROLL TRIGGER TIMELINE (Hero <-> Section 2)
-    // Uses autoAlpha (opacity + visibility) so inactive sections NEVER block clicks!
-    // =========================================================================
-    function initScrollTransition() {
-      if (scrollTlRef.current) return;
-
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: '+=1600',       // 1600px of virtual scroll travel
-          scrub: 1,            // Smooth manual hand scrubbing
-          pin: true,           // Freeze viewport while cards transform
-          anticipatePin: 1,
-        },
-      });
-
-      scrollTlRef.current = scrollTl;
-
-      // ───────────────────────────────────────────────────────────────────────
-      // STAGE A: Hero Copy Exits (autoAlpha hides it from pointer hit-testing)
-      // ───────────────────────────────────────────────────────────────────────
-      scrollTl
-        .to('.hero-title-group, .hero-footer-cta, .scroll-down-arrow', {
-          y: -40,
-          autoAlpha: 0,       // Sets opacity: 0 AND visibility: hidden
-          duration: 0.7,
-          ease: 'power2.inOut',
-        })
-        // All 7 cards collapse neatly from their fanned-out positions back to center
-        .to(cards, {
-          x: 0,
-          y: 0,
-          rotation: 0,
-          scale: 0.85,
-          zIndex: (i) => HERO_CARD_CONFIG[i].heroZIndex,
-          duration: 0.9,
-          ease: 'power2.inOut',
-          stagger: 0.02,
-        }, '<')
-
-      // ───────────────────────────────────────────────────────────────────────
-      // STAGE B: Stack Migrates to Right Column & Section 2 Text Becomes Active
-      // ───────────────────────────────────────────────────────────────────────
-        .to('.cards-stage-wrapper', {
-          x: '20vw',
-          y: '6vh',
-          duration: 1.1,
-          ease: 'power2.inOut',
-        })
-        .fromTo('.sec2-container',
-          { autoAlpha: 0, y: 35 },
-          { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-          '<0.2'
-        )
-
-      // ───────────────────────────────────────────────────────────────────────
-      // STAGE C: Cards Fan Out into Diagonal Staircase Cascade (60% -> 95%)
-      // ───────────────────────────────────────────────────────────────────────
-        .to(cards, {
-          x: (i) => HERO_CARD_CONFIG[i].stepX,
-          y: (i) => HERO_CARD_CONFIG[i].stepY,
-          rotation: 0,
-          scale: 0.94,
-          zIndex: (i) => 10 + i, // Ascending sequential staircase stacking
-          duration: 1.1,
-          ease: 'power3.out',
-          stagger: 0.03,
-        });
-
-      ScrollTrigger.refresh();
-    }
-
+    // Strict cleanup for event listeners and timeline references
+    return () => {
+      window.removeEventListener('wheel', handleEarlyScroll);
+      window.removeEventListener('touchmove', handleEarlyScroll);
+      scrollTlRef.current = null;
+      if (mainNav) {
+        gsap.set(mainNav, { clearProps: 'transform,opacity,visibility' });
+      }
+    };
   }, { scope: containerRef });
 
-  /**
-   * Smoothly auto-glides the viewport down to Section 2 when arrow is clicked
-   */
-  const handleScrollToSection2 = () => {
-    if (window.__lenis) {
-      window.__lenis.scrollTo(1600, {
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-    } else {
-      window.scrollTo({ top: 1600, behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section ref={containerRef}
+    <section 
+      ref={containerRef}
       className="herolandsec relative h-screen w-full overflow-hidden select-none"
       style={{
         paddingTop: '90px',
@@ -288,38 +295,32 @@ export default function HeroLanding() {
       {/* =================================================================== */}
       {/* SECTION 1: HERO CONTENT                                             */}
       {/* =================================================================== */}
-      <div className="hero-title-group absolute top-18 left-0 w-full text-center z-10 pointer-events-none">
+      <div className="hero-title-group absolute top-[72px] sm:top-[76px] left-0 w-full text-center z-10 pointer-events-none">
         <h1 className="hero-headline-text font-medium tracking-tight text-neutral-900 capitalize">
           <span className="hero-prefix inline-block uppercase">The future of advertising,</span><br />
           <span className="hero-suffix inline-block uppercase">built without cameras.</span>
         </h1>
       </div>
 
-      {/* Hero Footer CTA: High z-index (z-40) so buttons are 100% clickable */}
-      <div className="hero-footer-cta opacity-0 absolute left-1/2 -translate-x-1/2 flex flex-col items-center z-40 text-center pointer-events-auto"
-        style={{ gap: '6px' }}>
-        <p className=" hero-subtitle-text text-neutral-500 leading-relaxed">
-          Y16Orbital is a synthetic ad studio replacing multi-million dollar shoots with custom generative intelligence. Tailored AI actors, surreal product staging, and cinematic posters on demand.
-        </p>
+      {/* Hero Footer CTA:
+          Outer container handles horizontal center positioning (-translate-x-1/2) and responsive bottom placement.
+          Inner container handles vertical GSAP animations (y: 20 -> y: 0 -> y: -40), avoiding CSS transform collision. */}
+      <div className="hero-footer-cta absolute left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
+        <div className="hero-footer-cta-inner flex flex-col items-center text-center opacity-0" style={{ gap: '6px' }}>
+          <p className="hero-subtitle-text text-neutral-500 leading-relaxed">
+            Y16Orbital is a synthetic ad studio replacing multi-million dollar shoots with custom generative intelligence. Tailored AI actors, surreal product staging, and cinematic posters on demand.
+          </p>
 
-        <div className="flex items-center" style={{ gap: '16px', marginTop: '4px' }}>
-          <button 
-            type="button"
-            className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer pointer-events-auto"
-            style={{ padding: '10px 24px' }}
-          >
-            Explore Showroom
-          </button>
-          
-          {/* CLICKABLE SCROLL-DOWN ARROW TRIGGER: Placed at high z-index (z-40) */}
-          <button 
-            type="button"
-            onClick={handleScrollToSection2}
-            aria-label="Scroll to next section"
-            className="w-8 h-8 rounded-full border border-neutral-300 hover:border-black bg-white/70 backdrop-blur-sm flex items-center justify-center text-neutral-600 hover:text-black transition-all duration-200 hover:scale-110 shadow-xs cursor-pointer animate-bounce pointer-events-auto"
-          >
-            <ChevronDown className="w-4 h-4" />
-          </button>
+          <div className="flex items-center" style={{ gap: '16px', marginTop: '4px' }}>
+            <button 
+              type="button"
+              className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer pointer-events-auto"
+              style={{ padding: '10px 24px' }}
+            >
+              Explore Showroom
+            </button>
+            
+          </div>
         </div>
       </div>
 
@@ -346,7 +347,7 @@ export default function HeroLanding() {
             camera free campaigns, Virtual talent, Entire worlds crafted around your brand.
           </p>
 
-          <div className="sec2-buttons-group flex items-center" style={{ gap: '14px', marginTop: '24px' }} >
+          <div className="sec2-buttons-group flex items-center" style={{ gap: '14px', marginTop: '24px' }}>
             <button 
               type="button"
               className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
@@ -388,7 +389,7 @@ export default function HeroLanding() {
             <div 
               key={card.id}
               ref={(node) => { cardNodesRef.current[index] = node; }}
-              className=" card-d absolute origin-bottom cursor-pointer group"
+              className="card-d absolute origin-bottom cursor-pointer group"
               style={{ 
                 width: '180px',
                 height: '230px',

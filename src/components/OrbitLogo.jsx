@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * OrbitLogo Component
  * Minimalist abstract geometric brand mark:

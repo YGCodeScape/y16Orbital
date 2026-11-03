@@ -4,23 +4,23 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 
-// Register both plugins
+// Register plugins
 gsap.registerPlugin(ScrollTrigger, ScrambleTextPlugin);
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
- * 6 Cards Dataset with 2-Stage Coordinates:
+ * 6 Cards Dataset with 3 Explicit Visual States:
  * 
- * Stage 1 (Initial Sprout - Frame 1):
- * - Cards are standing upright (rotation: 0)
- * - They step outward along the right diagonal (x increases, y ascends upward/back)
- * - Front blue card (id: 5) is forward-most and prominent
- * - Each card behind it is scaled down and steps up-right (+x, -y)
+ * 1. initial (State 1: Sprout):
+ *    Cards emerge upright along the right diagonal
  * 
- * Stage 2 (Tilted Fan Deck - Frame 2):
- * - Cards fan out with a pivot point near the bottom/center
- * - Leftmost/back cards fan out to negative rotations (-24deg to -14deg)
- * - Rightmost/front cards fan toward positive rotations (e.g. +8deg to +14deg)
+ * 2. stacked (State 2: Compact Fan):
+ *    Cards pivot into the compact tilted fan deck with blue card prominent
+ * 
+ * 3. expanded (State 3: Expanded Diagonal Cascade):
+ *    Cards separate, scale down gracefully, and spread diagonally across
+ *    the entire viewport from top-left to bottom-right, fitting both
+ *    screen width and screen height without edge clipping.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 const STACK_CARDS = [
@@ -28,94 +28,107 @@ const STACK_CARDS = [
     id: 0,
     title: 'Text Poster Graphic',
     img: '/bannersec/bannerTop3.jpg',
-    // Stage 1: Furthest top-right card in line
-    initialX: 68,
-    initialY: -75,
-    initialRotate: 0,
-    initialScale: 0.88,
     zIndex: 10,
-    // Stage 2: Fanned far to the left
-    finalX: -36,
-    finalY: -22,
-    finalRotate: -24,
-    finalScale: 0.94,
+    initial: { x: 68, y: -75, rotation: 0, scale: 0.88 },
+    stacked: { x: -36, y: -22, rotation: -24, scale: 0.94 },
+    expanded: {
+      x: -420,
+      y: -60,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: -95,
+      mobileY: -150,
+      mobileScale: 0.60,
+    },
   },
   {
     id: 1,
     title: 'Editorial Sound',
     img: '/bannersec/bannerTop4.jpg',
-    initialX: 52,
-    initialY: -58,
-    initialRotate: 0,
-    initialScale: 0.90,
     zIndex: 12,
-    finalX: -28,
-    finalY: -16,
-    finalRotate: -17,
-    finalScale: 0.95,
+    initial: { x: 52, y: -58, rotation: 0, scale: 0.90 },
+    stacked: { x: -28, y: -16, rotation: -17, scale: 0.95 },
+    expanded: {
+      x: -230,
+      y: -10,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: -55,
+      mobileY: -90,
+      mobileScale: 0.62,
+    },
   },
   {
     id: 2,
     title: 'Vintage Cinema',
     img: '/bannersec/bannerTop5.jpg',
-    initialX: 38,
-    initialY: -42,
-    initialRotate: 0,
-    initialScale: 0.93,
     zIndex: 14,
-    finalX: -18,
-    finalY: -10,
-    finalRotate: -10,
-    finalScale: 0.97,
+    initial: { x: 38, y: -42, rotation: 0, scale: 0.93 },
+    stacked: { x: -18, y: -10, rotation: -10, scale: 0.97 },
+    expanded: {
+      x: -45,
+      y: 30,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: -18,
+      mobileY: -30,
+      mobileScale: 0.64,
+    },
   },
   {
     id: 3,
-    title: 'Delulu Synthetic',
-    img: '/art/art-3.jpg',
-    initialX: 24,
-    initialY: -28,
-    initialRotate: 0,
-    initialScale: 0.96,
+    title: 'Color synthetic',
+    img: '/works/work14.jpg',
     zIndex: 16,
-    finalX: -6,
-    finalY: -4,
-    finalRotate: -2,
-    finalScale: 0.98,
+    initial: { x: 24, y: -28, rotation: 0, scale: 0.96 },
+    stacked: { x: -6, y: -4, rotation: -2, scale: 0.98 },
+    expanded: {
+      x: 140,
+      y: 75,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: 20,
+      mobileY: 30,
+      mobileScale: 0.66,
+    },
   },
   {
     id: 4,
     title: 'Vibrant Neon',
     img: '/bannersec/bannerTop1.jpg',
-    initialX: 12,
-    initialY: -14,
-    initialRotate: 0,
-    initialScale: 0.98,
     zIndex: 18,
-    finalX: 6,
-    finalY: 4,
-    finalRotate: 6,
-    finalScale: 1.0,
+    initial: { x: 12, y: -14, rotation: 0, scale: 0.98 },
+    stacked: { x: 6, y: 4, rotation: 6, scale: 1.0 },
+    expanded: {
+      x: 325,
+      y: 130,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: 60,
+      mobileY: 90,
+      mobileScale: 0.68,
+    },
   },
   {
     id: 5,
     title: 'Azure Cloud 7 Feet',
     img: '/bannersec/bannerTop2.jpg',
     isFront: true,
-    // Stage 1: Front and center
-    initialX: 0,
-    initialY: 0,
-    initialRotate: 0,
-    initialScale: 1.0,
     zIndex: 20,
-    // Stage 2: Front card angled slightly to the right
-    finalX: 18,
-    finalY: 10,
-    finalRotate: 13,
-    finalScale: 1.02,
+    initial: { x: 0, y: 0, rotation: 0, scale: 1.0 },
+    stacked: { x: 18, y: 10, rotation: 13, scale: 1.02 },
+    expanded: {
+      x: 510,
+      y: 175,
+      rotation: 0,
+      scale: 1.1,
+      mobileX: 100,
+      mobileY: 150,
+      mobileScale: 0.70,
+    },
   },
 ];
 
-// Target text for all 3 kinetic lines
 const KINETIC_LINES = [
   "Whether you're a brand seeking iconic campaigns",
   "/ or creator directing synthetic actors 🎬 connects",
@@ -131,11 +144,12 @@ export default function Section4Sprout() {
     if (!containerRef.current) return;
 
     const cards = cardNodesRef.current.slice(0, STACK_CARDS.length);
-    const textLines = textGroupRef.current ? textGroupRef.current.querySelectorAll('.sprout-line') : [];
+    const textLines = textGroupRef.current
+      ? textGroupRef.current.querySelectorAll('.sprout-line')
+      : [];
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 1. INITIAL RESTING STATE
-    // Lines start with opacity 0, blur, and slight translation
+    // 0. INITIAL RESTING STATE (Applied synchronously on mount)
     // ─────────────────────────────────────────────────────────────────────────
     gsap.set(textLines, {
       opacity: 0,
@@ -143,7 +157,6 @@ export default function Section4Sprout() {
       y: 20,
     });
 
-    // Cards start small (scale 0), blurred, entering from slightly below
     gsap.set(cards, {
       opacity: 0,
       scale: 0,
@@ -155,20 +168,34 @@ export default function Section4Sprout() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. TIMELINE: SCRAMBLE TEXT ON KINETIC LINES + CARDS SPROUT
+    // PINNED 5-STAGE SCRUBBED TIMELINE
+    // - Pinned duration extended to 3.8 viewport heights for ample scroll track
+    // - Self-contained; pinSpacing naturally pushes Section 5
     // ─────────────────────────────────────────────────────────────────────────
-    const entranceTl = gsap.timeline({
-      paused: true,
-      defaults: { ease: 'power3.out' },
+    const sproutTl = gsap.timeline({
+      scrollTrigger: {
+        id: 'sec4-sprout-pin',
+        trigger: containerRef.current,
+        start: 'top top',
+        end: () => `+=${Math.round(window.innerHeight * 3.8)}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 1,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      },
     });
 
-    // Step 1: Line 1 ScrambleText reveal
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE 1 (10% Timeline Share): Headline Introduction
+    // Line 1 ScrambleText reveals; cards remain hidden
+    // ─────────────────────────────────────────────────────────────────────────
     if (textLines[0]) {
-      entranceTl.to(textLines[0], {
+      sproutTl.to(textLines[0], {
         opacity: 1,
         filter: 'blur(0px)',
         y: 0,
-        duration: 0.85,
+        duration: 1.0,
         scrambleText: {
           text: KINETIC_LINES[0],
           chars: 'lowerCase',
@@ -178,98 +205,144 @@ export default function Section4Sprout() {
       });
     }
 
-    // Step 2: Cards emerge from scale 0 into upright stepping cascade (Frame 1)
-    entranceTl.to(cards, {
-      opacity: 1,
-      filter: 'blur(0px)',
-      x: (i) => STACK_CARDS[i].initialX,
-      y: (i) => STACK_CARDS[i].initialY,
-      rotation: (i) => STACK_CARDS[i].initialRotate,
-      scale: (i) => STACK_CARDS[i].initialScale,
-      duration: 1.1,
-      stagger: 0.12,
-      ease: 'back.out(1.2)',
-    }, '-=0.4');
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE 2 (20% Timeline Share): Sprout
+    // Cards emerge into upright stepping staircase; Lines 2 & 3 reveal
+    // ─────────────────────────────────────────────────────────────────────────
+    sproutTl.to(
+      cards,
+      {
+        opacity: 1,
+        filter: 'blur(0px)',
+        x: (i) => STACK_CARDS[i].initial.x,
+        y: (i) => STACK_CARDS[i].initial.y,
+        rotation: (i) => STACK_CARDS[i].initial.rotation,
+        scale: (i) => STACK_CARDS[i].initial.scale,
+        duration: 2.0,
+        stagger: 0.08,
+        ease: 'power2.out',
+      },
+      '-=0.2'
+    );
 
-    // Step 3: Line 2 ScrambleText reveal
     if (textLines[1]) {
-      entranceTl.to(textLines[1], {
-        opacity: 1,
-        filter: 'blur(0px)',
-        y: 0,
-        duration: 0.8,
-        scrambleText: {
-          text: KINETIC_LINES[1],
-          chars: 'lowerCase',
-          speed: 0.45,
-          revealDelay: 0.1,
+      sproutTl.to(
+        textLines[1],
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          y: 0,
+          duration: 1.0,
+          scrambleText: {
+            text: KINETIC_LINES[1],
+            chars: 'lowerCase',
+            speed: 0.45,
+            revealDelay: 0.1,
+          },
         },
-      }, '-=0.5');
+        '<0.2'
+      );
     }
 
-    // Step 4: Line 3 ScrambleText reveal
     if (textLines[2]) {
-      entranceTl.to(textLines[2], {
-        opacity: 1,
-        filter: 'blur(0px)',
-        y: 0,
-        duration: 0.8,
-        scrambleText: {
-          text: KINETIC_LINES[2],
-          chars: 'lowerCase',
-          speed: 0.45,
-          revealDelay: 0.1,
+      sproutTl.to(
+        textLines[2],
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          y: 0,
+          duration: 1.0,
+          scrambleText: {
+            text: KINETIC_LINES[2],
+            chars: 'lowerCase',
+            speed: 0.45,
+            revealDelay: 0.1,
+          },
         },
-      }, '-=0.4');
+        '<0.3'
+      );
     }
 
-    // Step 5: Cards pivot together into tilted fanned deck (Frame 2)
-    entranceTl.to(cards, {
-      x: (i) => STACK_CARDS[i].finalX,
-      y: (i) => STACK_CARDS[i].finalY,
-      rotation: (i) => STACK_CARDS[i].finalRotate,
-      scale: (i) => STACK_CARDS[i].finalScale,
-      duration: 1.0,
-      stagger: 0.04,
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE 3 (15% Timeline Share): Compact Stack Formation
+    // Cards pivot together into the tilted fan deck with natural overlapping
+    // ─────────────────────────────────────────────────────────────────────────
+    sproutTl.to(cards, {
+      x: (i) => STACK_CARDS[i].stacked.x,
+      y: (i) => STACK_CARDS[i].stacked.y,
+      rotation: (i) => STACK_CARDS[i].stacked.rotation,
+      scale: (i) => STACK_CARDS[i].stacked.scale,
+      duration: 1.5,
+      stagger: 0.03,
       ease: 'power2.inOut',
-    }, '-=0.2');
+    });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. ACCURATE SCROLLTRIGGER ATTACHMENT
-    // Using top+=1600px pin offset ensures the trigger fires exactly when
-    // user scrolls down and lands on Section 4!
+    // STAGE 4 (40% Timeline Share): Card Separation & Diagonal Expansion
+    // Behind text fades out completely (opacity: 0) to avoid any clash.
+    // Cards scale down smoothly and expand to fill full screen width & height.
     // ─────────────────────────────────────────────────────────────────────────
-    ScrollTrigger.create({
-      id: 'sec4-sprout-direct',
-      trigger: containerRef.current,
-      start: 'top+=1600px 75%',
-      end: 'bottom 25%',
-      toggleActions: 'play none none reverse',
-      onEnter: () => entranceTl.play(),
-      onLeaveBack: () => entranceTl.reverse(),
-    });
+    sproutTl.to(
+      '.sec4-text-group',
+      {
+        opacity: 0,
+        y: -35,
+        filter: 'blur(8px)',
+        duration: 1.5,
+        ease: 'power2.inOut',
+      },
+      '+=0.1'
+    );
+
+    sproutTl.to(
+      cards,
+      {
+        x: (i) =>
+          window.innerWidth < 768
+            ? STACK_CARDS[i].expanded.mobileX
+            : STACK_CARDS[i].expanded.x,
+        y: (i) =>
+          window.innerWidth < 768
+            ? STACK_CARDS[i].expanded.mobileY
+            : STACK_CARDS[i].expanded.y,
+        rotation: (i) => STACK_CARDS[i].expanded.rotation,
+        scale: (i) =>
+          window.innerWidth < 768
+            ? STACK_CARDS[i].expanded.mobileScale
+            : STACK_CARDS[i].expanded.scale,
+        duration: 4.0,
+        stagger: 0.07,
+        ease: 'power2.inOut',
+      },
+      '<'
+    );
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STAGE 5 (15% Timeline Share): Final Composition Hold
+    // Expanded composition holds firmly in view before unpinning cleanly
+    // ─────────────────────────────────────────────────────────────────────────
+    sproutTl.to({}, { duration: 1.5 });
 
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef}
-      className="sec4-sprout-section relative w-full min-h-screen flex items-center justify-center overflow-hidden select-none"
+    <section
+      ref={containerRef}
+      id="services"
+      className="sec4-sprout-section relative w-full h-screen flex items-center justify-center overflow-hidden select-none bg-[#f8f7f5]"
       style={{
-        paddingTop: '100px',
-        paddingBottom: '120px',
         paddingLeft: '24px',
         paddingRight: '24px',
       }}
     >
-      <div className="sec4-stage-container relative w-full max-w-6xl mx-auto flex items-center justify-center">
-        
+      <div className="sec4-stage-container relative w-full max-w-7xl mx-auto flex items-center justify-center">
         {/* ───────────────────────────────────────────────────────────────── */}
         {/* 1. BACKGROUND KINETIC TEXT (With ScrambleText Effect)              */}
         {/* ───────────────────────────────────────────────────────────────── */}
         <div
           ref={textGroupRef}
           className="sec4-text-group w-full text-center flex flex-col items-center pointer-events-none z-10"
-          style={{ gap: '14px', marginTop: '109px', }}
+          style={{ gap: '14px', marginTop: '90px' }}
         >
           {/* Line 1 */}
           <p className="sprout-line sec4-heading-line font-medium tracking-tight text-neutral-900 leading-[1.25]">
@@ -288,28 +361,29 @@ export default function Section4Sprout() {
         </div>
 
         {/* ───────────────────────────────────────────────────────────────── */}
-        {/* 2. THE 6 CARDS STAGE (Floats in center right over the text)       */}
+        {/* 2. THE 6 EXPANDING CARDS (Collective Deck -> Individual Showcase) */}
         {/* ───────────────────────────────────────────────────────────────── */}
         <div
-          className="sec4-cards-deck-wrapper absolute inset-0 flex top-[-40px] justify-center pointer-events-none z-20"
+          className="sec4-cards-deck-wrapper absolute inset-0 flex justify-center items-center pointer-events-none z-20"
         >
           <div
             className="relative flex items-center justify-center pointer-events-auto"
-            style={{ width: '220px', height: '290px' }}
+            style={{ width: '200px', height: '260px' }}
           >
             {STACK_CARDS.map((card, index) => (
               <div
                 key={card.id}
                 ref={(node) => { cardNodesRef.current[index] = node; }}
-                className="sec4-stack-card absolute cursor-pointer transition-transform duration-300 ease-out hover:scale-105"
+                className="sec4-stack-card absolute cursor-pointer will-change-transform"
                 style={{
-                  width: '210px',
-                  height: '275px',
+                  width: '185px',
+                  height: '245px',
                   transformOrigin: '50% 85%',
                 }}
               >
-                {/* Card Container */}
-                <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl  bg-neutral-900">
+                {/* Inner card container: GSAP controls outer card coordinates;
+                    inner container handles hover without CSS transform collision */}
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-neutral-900 border border-white/60 transition-transform duration-200 hover:scale-[1.03]">
                   <img
                     src={card.img}
                     alt={card.title}
@@ -318,7 +392,7 @@ export default function Section4Sprout() {
                       e.currentTarget.style.display = 'none';
                     }}
                   />
-               </div>
+                </div>
               </div>
             ))}
           </div>

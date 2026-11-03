@@ -17,16 +17,14 @@ const TRAIL_IMAGES = [
 ];
 
 const POOL_SIZE = 6;       // Bounded object pool to ensure 0 memory leaks
-const CARD_SIZE = 190;     // 1:1 ratio square card size in px
+const CARD_SIZE = 190;     // Default fallback square size
 const SPAWN_DISTANCE = 65; // Distance in px cursor must travel to spawn next card
 
 /**
  * InteractiveBanner Component
  * - Large cinematic billboard with smooth vertical parallax image scroll.
- * - Perfectly bounded background image (top: -15%, height: 130%) to guarantee
- *   ZERO black gaps or blank spaces at the top or bottom at any scroll position.
- * - Option 3 Interactive Trail Engine: Object-pooled 1:1 image cards that pop up
- *   directly at the mouse cursor with spring bounce and fade out automatically.
+ * - Perfectly bounded background image (height: 130%) to guarantee full coverage.
+ * - Context-safe Option 3 interactive trail engine with responsive card centering.
  */
 export default function InteractiveBanner() {
   const bannerWrapRef = useRef(null);
@@ -34,18 +32,17 @@ export default function InteractiveBanner() {
   const cardsPoolRef = useRef([]);
   const imgNodesRef = useRef([]);
 
-  // Internal interaction state stored in refs (no React re-renders!)
+  // Internal interaction state stored in refs (no React re-renders)
   const lastSpawnPos = useRef({ x: -999, y: -999 });
   const poolIndexRef = useRef(0);
   const imageIndexRef = useRef(0);
   const zIndexCounter = useRef(10);
 
-  // Parallax background image glide on scroll
-  useGSAP(() => {
+  // Parallax background image glide on scroll & contextSafe lifecycle setup
+  const { contextSafe } = useGSAP(() => {
     if (!parallaxImgRef.current || !bannerWrapRef.current) return;
 
     // Smooth upward gliding motion as the user scrolls down
-    // (translates from +6% to -6%, moving UPWARDS with 100% full coverage)
     gsap.fromTo(
       parallaxImgRef.current,
       { yPercent: 6 },
@@ -63,9 +60,10 @@ export default function InteractiveBanner() {
   }, { scope: bannerWrapRef });
 
   /**
-   * Spawns or recycles a card from the pool at cursor coordinates
+   * Spawns or recycles a card from the pool at cursor coordinates.
+   * Wrapped in contextSafe for reliable lifecycle cleanup.
    */
-  const handlePointerMove = (e) => {
+  const handlePointerMove = contextSafe((e) => {
     const wrap = bannerWrapRef.current;
     if (!wrap) return;
 
@@ -100,9 +98,11 @@ export default function InteractiveBanner() {
     // Bring this newly spawned card to the very top
     zIndexCounter.current += 1;
 
-    // Center card at cursor
-    const targetLeft = cursorX - CARD_SIZE / 2;
-    const targetTop = cursorY - CARD_SIZE / 2;
+    // Center card accurately at cursor using actual rendered dimensions (handles mobile vs desktop)
+    const cardWidth = cardEl.offsetWidth || CARD_SIZE;
+    const cardHeight = cardEl.offsetHeight || CARD_SIZE;
+    const targetLeft = cursorX - cardWidth / 2;
+    const targetTop = cursorY - cardHeight / 2;
 
     // Kill any active tweens on this recycled card
     gsap.killTweensOf(cardEl);
@@ -135,7 +135,7 @@ export default function InteractiveBanner() {
         },
       }
     );
-  };
+  });
 
   /**
    * Reset tracking when cursor exits the banner
@@ -145,11 +145,13 @@ export default function InteractiveBanner() {
   };
 
   return (
-    <div ref={bannerWrapRef}
+    <div
+      ref={bannerWrapRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="sec3-banner-wrap relative w-full overflow-hidden select-none cursor-crosshair"
-      style={{ borderRadius: '32px', backgroundColor: 'transparent', }} >
+      className="sec3-banner-wrap relative w-full overflow-hidden select-none cursor-default"
+      style={{ borderRadius: '32px', backgroundColor: 'transparent' }}
+    >
       {/* ─────────────────────────────────────────────────────────────────── */}
       {/* 1. PARALLAX BACKGROUND BANNER IMAGE (100% full frame coverage)       */}
       {/* ─────────────────────────────────────────────────────────────────── */}
@@ -170,7 +172,6 @@ export default function InteractiveBanner() {
             e.currentTarget.style.display = 'none';
           }}
         />
-
       </div>
 
       {/* ─────────────────────────────────────────────────────────────────── */}

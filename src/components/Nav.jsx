@@ -21,15 +21,13 @@ const NAV_LINKS = [
 export default function Nav() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Prevent background scroll when mobile menu is open
+  // Prevent background scroll when mobile menu is open without clobbering existing inline styles
   useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    if (!isMobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
     };
   }, [isMobileOpen]);
 

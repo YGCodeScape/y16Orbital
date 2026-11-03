@@ -9,7 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Section3Gateway Component
- * Restored original blur & opacity reveal on "Gateway to synthetic talent."
+ * Natural document-flow section following pinned HeroLanding.
+ * All triggers are locally calculated relative to their own DOM elements.
  */
 export default function Section3Gateway() {
   const sectionRef = useRef(null);
@@ -20,21 +21,26 @@ export default function Section3Gateway() {
     if (!sectionRef.current) return;
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 1. NAV THEME TOGGLE (turns navbar white inside Section 3)
+    // 1. DYNAMIC NAV THEME TOGGLE (adapts to actual responsive navbar height)
     // ─────────────────────────────────────────────────────────────────────────
+    const getNavHeight = () => {
+      return document.querySelector('#main-nav')?.getBoundingClientRect().height || 72;
+    };
+
     ScrollTrigger.create({
       id: 'sec3-nav-theme',
       trigger: sectionRef.current,
-      start: 'top+=165% 72px',
-      end: 'top+=220% 72px',
+      start: () => `top top+=${getNavHeight()}`,
+      end: () => `bottom top+=${getNavHeight()}`,
       toggleClass: {
         targets: '#main-nav',
         className: 'nav-theme-white',
       },
+      invalidateOnRefresh: true,
     });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. WORD-BY-WORD TITLE BLUR & OPACITY REVEAL (RESTORED)
+    // 2. WORD-BY-WORD TITLE BLUR & OPACITY REVEAL
     // ─────────────────────────────────────────────────────────────────────────
     if (titleRef.current) {
       const words = titleRef.current.querySelectorAll('.gateway-reveal-word');
@@ -56,8 +62,7 @@ export default function Section3Gateway() {
           scrollTrigger: {
             id: 'sec3-title-reveal',
             trigger: titleRef.current,
-            start: 'top+=1650px 100%',
-            end: 'top+=1650px 100%',
+            start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
         }
@@ -93,6 +98,7 @@ export default function Section3Gateway() {
   return (
     <section
       ref={sectionRef}
+      id="showcase"
       className="sec3-section-root relative w-full flex flex-col items-center bg-[#f8f7f5]"
     >
       {/* ─────────────────────────────────────────────────────────────────── */}

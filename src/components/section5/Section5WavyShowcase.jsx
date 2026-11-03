@@ -87,8 +87,8 @@ export default function Section5WavyShowcase() {
     ScrollTrigger.create({
       id: 'sec5-text-reveal',
       trigger: sectionRef.current,
-      start: 'top+=1800 75%',
-      end: 'bottom+=1250 55%',
+      start: 'top 75%',
+      end: 'bottom 55%',
       toggleActions: 'play none none reverse',
       onEnter: () => textTl.play(),
       onLeaveBack: () => textTl.reverse(),
