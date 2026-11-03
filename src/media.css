@@ -192,6 +192,7 @@
   .sec5-work-card {
     width: 92px !important;
     height: 110px !important;
+    margin-right: 16px !important;
   }
 }
 
@@ -340,7 +341,7 @@
   }
 
   .sec4-stack-card {
-    width: 210px !important;
-    height: 275px !important;
+    width: 185px !important;
+    height: 245px !important;
   }
 }

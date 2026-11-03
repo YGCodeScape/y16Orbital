@@ -43,19 +43,31 @@ export default function Section5WavyShowcase() {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
+
   const topTrackRef = useRef(null);
   const bottomTrackRef = useRef(null);
-  const topCardsRef = useRef([]);
-  const bottomCardsRef = useRef([]);
+
+  const topGroup1CardsRef = useRef([]);
+  const topGroup2CardsRef = useRef([]);
+  const bottomGroup1CardsRef = useRef([]);
+  const bottomGroup2CardsRef = useRef([]);
 
   useGSAP(() => {
     if (!sectionRef.current) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth <= 768;
+
     // ─────────────────────────────────────────────────────────────────────────
     // 1. CENTER TEXT WORD-BY-WORD BLUR & OPACITY REVEAL
+    // Purely local trigger on sectionRef — no manual offsets.
     // ─────────────────────────────────────────────────────────────────────────
-    const titleWords = titleRef.current ? titleRef.current.querySelectorAll('.sec5-reveal-word') : [];
-    const subtitleWords = subtitleRef.current ? subtitleRef.current.querySelectorAll('.sec5-reveal-subword') : [];
+    const titleWords = titleRef.current
+      ? titleRef.current.querySelectorAll('.sec5-reveal-word')
+      : [];
+    const subtitleWords = subtitleRef.current
+      ? subtitleRef.current.querySelectorAll('.sec5-reveal-subword')
+      : [];
 
     gsap.set([...titleWords, ...subtitleWords], {
       opacity: 0,
@@ -76,13 +88,17 @@ export default function Section5WavyShowcase() {
         stagger: 0.08,
         duration: 0.7,
       })
-      .to(subtitleWords, {
-        opacity: 1,
-        filter: 'blur(0px)',
-        y: 0,
-        stagger: 0.03,
-        duration: 0.6,
-      }, '-=0.3');
+      .to(
+        subtitleWords,
+        {
+          opacity: 1,
+          filter: 'blur(0px)',
+          y: 0,
+          stagger: 0.03,
+          duration: 0.6,
+        },
+        '-=0.3'
+      );
 
     ScrollTrigger.create({
       id: 'sec5-text-reveal',
@@ -94,17 +110,22 @@ export default function Section5WavyShowcase() {
       onLeaveBack: () => textTl.reverse(),
     });
 
+    // If user prefers reduced motion, skip continuous marquee & sine floating
+    if (prefersReducedMotion) return;
+
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. HORIZONTAL AUTO-SCROLLING TRACKS (Continuous marquee loop)
-    // - Top track: moves Right to Left (xPercent: 0 -> -50)
-    // - Bottom track: moves Left to Right (xPercent: -50 -> 0)
-    // Using force3D: true ensures GPU rasterization, eliminating subpixel jitter/lag.
+    // 2. HORIZONTAL LOOP (Two identical groups, translation by -50%)
+    // - Relaxed, organic speed: 42s desktop / 48s mobile
+    // - Top: moves Right to Left (xPercent: 0 -> -50)
+    // - Bottom: moves Left to Right (xPercent: -50 -> 0)
     // ─────────────────────────────────────────────────────────────────────────
+    const loopDuration = isMobile ? 48 : 42;
+
     if (topTrackRef.current) {
       gsap.to(topTrackRef.current, {
         xPercent: -50,
         ease: 'none',
-        duration: 38,
+        duration: loopDuration,
         repeat: -1,
         force3D: true,
       });
@@ -117,7 +138,7 @@ export default function Section5WavyShowcase() {
         {
           xPercent: 0,
           ease: 'none',
-          duration: 38,
+          duration: loopDuration,
           repeat: -1,
           force3D: true,
         }
@@ -125,35 +146,56 @@ export default function Section5WavyShowcase() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. VERTICAL SINE-WAVE MOTION (The signature organic wavy wave!)
-    // Each individual card oscillates up and down with an offset phase.
-    // force3D: true on individual cards prevents micro-stutters and blurry jitter.
+    // 3. SYNCHRONIZED SINE-WAVE MOTION
+    // Both copies (Group 1 & Group 2) of each image share the exact same wave phase!
+    // This eliminates any jump or discontinuity at the loop seam.
     // ─────────────────────────────────────────────────────────────────────────
-    const topCards = topCardsRef.current.filter(Boolean);
-    topCards.forEach((card, i) => {
-      gsap.to(card, {
-        y: -22,
-        rotation: (i % 2 === 0 ? 2.5 : -2.5),
-        duration: 2.4 + (i % 3) * 0.25,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: (i * 0.22) % 2.2,
-        force3D: true,
+    const waveDist = isMobile ? 12 : 18;
+    const waveRot = isMobile ? 1.5 : 2;
+
+    // Top Row Waves
+    TOP_ROW_WORKS.forEach((_, i) => {
+      const cardA = topGroup1CardsRef.current[i];
+      const cardB = topGroup2CardsRef.current[i];
+      const duration = 2.8 + (i % 3) * 0.28;
+      const delay = (i * 0.24) % 2.4;
+      const rotation = i % 2 === 0 ? waveRot : -waveRot;
+
+      [cardA, cardB].forEach((card) => {
+        if (!card) return;
+        gsap.to(card, {
+          y: -waveDist,
+          rotation: rotation,
+          duration: duration,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: delay,
+          force3D: true,
+        });
       });
     });
 
-    const bottomCards = bottomCardsRef.current.filter(Boolean);
-    bottomCards.forEach((card, i) => {
-      gsap.to(card, {
-        y: 22,
-        rotation: (i % 2 === 0 ? -2.5 : 2.5),
-        duration: 2.5 + (i % 3) * 0.25,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: (i * 0.26) % 2.4,
-        force3D: true,
+    // Bottom Row Waves
+    BOTTOM_ROW_WORKS.forEach((_, i) => {
+      const cardA = bottomGroup1CardsRef.current[i];
+      const cardB = bottomGroup2CardsRef.current[i];
+      const duration = 2.9 + (i % 3) * 0.28;
+      const delay = (i * 0.28) % 2.5;
+      const rotation = i % 2 === 0 ? -waveRot : waveRot;
+
+      [cardA, cardB].forEach((card) => {
+        if (!card) return;
+        gsap.to(card, {
+          y: waveDist,
+          rotation: rotation,
+          duration: duration,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: delay,
+          force3D: true,
+        });
       });
     });
 
@@ -162,55 +204,85 @@ export default function Section5WavyShowcase() {
   return (
     <section
       ref={sectionRef}
+      id="virtual-cast"
       className="sec5-wavy-section relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#f8f7f5] select-none"
       style={{
-        paddingTop: '48px',
-        paddingBottom: '48px',
+        paddingTop: '88px',
+        paddingBottom: '88px',
       }}
     >
       {/* ───────────────────────────────────────────────────────────────── */}
-      {/* TOP ROW: Moves Right to Left with wavy vertical sine float        */}
+      {/* TOP ROW: Moves Right to Left with synchronized vertical sine wave  */}
       {/* ───────────────────────────────────────────────────────────────── */}
       <div
         className="sec5-marquee-mask relative w-full overflow-hidden"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          maskImage:
+            'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          WebkitMaskImage:
+            'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
           paddingTop: '20px',
           paddingBottom: '20px',
         }}
       >
         <div
           ref={topTrackRef}
-          className="flex items-center gap-6 whitespace-nowrap will-change-transform"
+          className="flex items-center whitespace-nowrap will-change-transform"
           style={{ width: 'max-content' }}
         >
-          {/* Double array for seamless loop */}
-          {[...TOP_ROW_WORKS, ...TOP_ROW_WORKS].map((work, idx) => (
-            <div
-              key={`top-${work.id}-${idx}`}
-              ref={(node) => { topCardsRef.current[idx] = node; }}
-              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108 will-change-transform"
-              style={{
-                width: '124px',
-                height: '148px',
-                transform: 'translateZ(0)',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-              }}
-            >
-              <img
-                src={work.img}
-                alt={`AI Campaign Showcase ${work.id}`}
-                className="w-full h-full object-cover select-none pointer-events-none"
-                loading="eager"
-                decoding="async"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-          ))}
+          {/* Group 1: Primary set */}
+          <div className="flex items-center shrink-0">
+            {TOP_ROW_WORKS.map((work, idx) => (
+              <div
+                key={`top-g1-${work.id}`}
+                ref={(node) => { topGroup1CardsRef.current[idx] = node; }}
+                className="sec5-work-card shrink-0 will-change-transform"
+                style={{ width: '124px', height: '148px', marginRight: '16px'}}
+              >
+                {/* Inner wrapper owns hover scale — prevents competing with wave */}
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-[1.06]">
+                  <img
+                    src={work.img}
+                    alt={`AI Commercial Talent ${work.id}`}
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                    loading={idx < 4 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Group 2: Identical duplicate (hidden from screen readers) */}
+          <div
+            aria-hidden="true"
+            className="flex items-center shrink-0"
+          >
+            {TOP_ROW_WORKS.map((work, idx) => (
+              <div
+                key={`top-g2-${work.id}`}
+                ref={(node) => { topGroup2CardsRef.current[idx] = node; }}
+                className="sec5-work-card shrink-0 will-change-transform"
+                style={{ width: '124px', height: '148px', marginRight: '16px' }}
+              >
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-[1.06]">
+                  <img
+                    src={work.img}
+                    alt=""
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -218,12 +290,10 @@ export default function Section5WavyShowcase() {
       {/* CENTER COPY: AI Advertising Agency Headline with Blur & Opacity   */}
       {/* ───────────────────────────────────────────────────────────────── */}
       <div className="sec5-center-content my-auto text-center px-6 flex flex-col items-center">
-        {/* Subtle decorative glyph */}
         <span className="text-sm font-serif italic text-neutral-400 mb-3 block">
           of
         </span>
 
-        {/* Headline */}
         <h2
           ref={titleRef}
           className="sec5-title font-medium tracking-tight text-neutral-900 leading-[1.08] max-w-4xl"
@@ -239,7 +309,6 @@ export default function Section5WavyShowcase() {
           <span className="sec5-reveal-word inline-block">us.</span>
         </h2>
 
-        {/* Subtitle */}
         <p
           ref={subtitleRef}
           className="sec5-subtitle text-neutral-500 font-normal leading-relaxed max-w-lg mt-5 text-sm sm:text-base"
@@ -255,48 +324,76 @@ export default function Section5WavyShowcase() {
       </div>
 
       {/* ───────────────────────────────────────────────────────────────── */}
-      {/* BOTTOM ROW: Moves Left to Right with wavy vertical sine float     */}
+      {/* BOTTOM ROW: Moves Left to Right with synchronized vertical sine    */}
       {/* ───────────────────────────────────────────────────────────────── */}
       <div
         className="sec5-marquee-mask relative w-full overflow-hidden"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          maskImage:
+            'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          WebkitMaskImage:
+            'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
           paddingTop: '20px',
           paddingBottom: '20px',
         }}
       >
         <div
           ref={bottomTrackRef}
-          className="flex items-center gap-6 whitespace-nowrap will-change-transform"
+          className="flex items-center whitespace-nowrap will-change-transform"
           style={{ width: 'max-content' }}
         >
-          {/* Double array for seamless loop */}
-          {[...BOTTOM_ROW_WORKS, ...BOTTOM_ROW_WORKS].map((work, idx) => (
-            <div
-              key={`bot-${work.id}-${idx}`}
-              ref={(node) => { bottomCardsRef.current[idx] = node; }}
-              className="sec5-work-card shrink-0 rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-108 will-change-transform"
-              style={{
-                width: '124px',
-                height: '148px',
-                transform: 'translateZ(0)',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-              }}
-            >
-              <img
-                src={work.img}
-                alt={`AI Product Showcase ${work.id}`}
-                className="w-full h-full object-cover select-none pointer-events-none"
-                loading="eager"
-                decoding="async"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </div>
-          ))}
+          {/* Group 1: Primary set */}
+          <div className="flex items-center shrink-0">
+            {BOTTOM_ROW_WORKS.map((work, idx) => (
+              <div
+                key={`bot-g1-${work.id}`}
+                ref={(node) => { bottomGroup1CardsRef.current[idx] = node; }}
+                className="sec5-work-card shrink-0 will-change-transform"
+                style={{ width: '124px', height: '148px', marginRight: '16px' }}
+              >
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-[1.06]">
+                  <img
+                    src={work.img}
+                    alt={`AI Product Showcase ${work.id}`}
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                    loading={idx < 4 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Group 2: Identical duplicate (hidden from screen readers) */}
+          <div
+            aria-hidden="true"
+            className="flex items-center shrink-0"
+          >
+            {BOTTOM_ROW_WORKS.map((work, idx) => (
+              <div
+                key={`bot-g2-${work.id}`}
+                ref={(node) => { bottomGroup2CardsRef.current[idx] = node; }}
+                className="sec5-work-card shrink-0  will-change-transform"
+                style={{ width: '124px', height: '148px', marginRight: '16px' }}
+              >
+                <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-white/80 bg-neutral-200 transition-transform duration-300 hover:scale-[1.06]">
+                  <img
+                    src={work.img}
+                    alt=""
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

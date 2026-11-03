@@ -33,7 +33,7 @@ const STACK_CARDS = [
     stacked: { x: -36, y: -22, rotation: -24, scale: 0.94 },
     expanded: {
       x: -420,
-      y: -60,
+      y: -80,
       rotation: 0,
       scale: 1.1,
       mobileX: -95,
@@ -329,7 +329,7 @@ export default function Section4Sprout() {
     <section
       ref={containerRef}
       id="services"
-      className="sec4-sprout-section relative w-full h-screen flex items-center justify-center overflow-hidden select-none bg-[#f8f7f5]"
+      className="sec4-sprout-section relative w-full h-screen flex items-center justify-center overflow-hidden select-none"
       style={{
         paddingLeft: '24px',
         paddingRight: '24px',

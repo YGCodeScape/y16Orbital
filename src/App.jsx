@@ -6,7 +6,7 @@ import Nav from './components/Nav';
 import HeroLanding from './components/HeroLanding';
 import Section3Gateway from './components/section3/Section3Gateway';
 import Section4Sprout from './components/section4/Section4Sprout';
-// import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
+import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
 // import Section6PerspectiveHero from './components/section6/Section6PerspectiveHero';
 
 // Register GSAP plugins globally
@@ -124,8 +124,8 @@ export default function App() {
         <HeroLanding />
         <Section3Gateway />
         <Section4Sprout />
-        {/* <Section5WavyShowcase />
-        <Section6PerspectiveHero /> */}
+        <Section5WavyShowcase />
+        {/* <Section6PerspectiveHero /> */}
       </main>
     </div>
   );
