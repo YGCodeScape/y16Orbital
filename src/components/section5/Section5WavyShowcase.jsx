@@ -202,14 +202,9 @@ export default function Section5WavyShowcase() {
   }, { scope: sectionRef });
 
   return (
-    <section
-      ref={sectionRef}
-      id="virtual-cast"
-      className="sec5-wavy-section relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#f8f7f5] select-none"
-      style={{
-        paddingTop: '88px',
-        paddingBottom: '88px',
-      }}
+    <section ref={sectionRef} id="virtual-cast"
+      className="sec5-wavy-section relative w-full min-h-screen flex flex-col justify-between overflow-hidden select-none"
+      style={{ paddingTop: '88px', paddingBottom: '88px', }}
     >
       {/* ───────────────────────────────────────────────────────────────── */}
       {/* TOP ROW: Moves Right to Left with synchronized vertical sine wave  */}

@@ -96,9 +96,7 @@ export default function Section3Gateway() {
   }, { scope: sectionRef });
 
   return (
-    <section
-      ref={sectionRef}
-      id="showcase"
+    <section ref={sectionRef} id="showcase"
       className="sec3-section-root relative w-full flex flex-col items-center bg-[#f8f7f5]"
     >
       {/* ─────────────────────────────────────────────────────────────────── */}

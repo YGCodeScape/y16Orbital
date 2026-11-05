@@ -397,11 +397,80 @@
   .sec8-overlay-return-btn {
     padding: 10px 16px !important;
   }
+
+  /* --- Footer (Mobile) --- */
+  .footer-section-root {
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  .footer-section-root img {
+    object-position: 72% 30% !important;
+  }
+  .footer-content-inner {
+    margin: 0 auto !important;
+    padding-top: 88px !important;
+    padding-bottom: 24px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .footer-top-row {
+    gap: 32px !important;
+  }
+  .footer-group-heading {
+    margin-bottom: 8px !important;
+  }
+  .footer-link-list > * + * {
+    margin-top: 4px !important;
+  }
+  .footer-link-anchor {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.2s ease !important;
+  }
+  .footer-link-anchor-left:hover {
+    transform: translateX(6px) !important;
+    color: #ffffff !important;
+  }
+  .footer-link-anchor-right:hover {
+    transform: translateX(-6px) !important;
+    color: #ffffff !important;
+  }
+  .footer-divider-line {
+    transform-origin: left center !important;
+    margin-top: 12px !important;
+    margin-left: 0 !important;
+  }
+  .footer-right-group {
+    text-align: left !important;
+  }
+  .footer-right-group > * + * {
+    margin-top: 24px !important;
+  }
+  .footer-bottom-layer > * + * {
+    margin-top: 16px !important;
+  }
+  .footer-orbit-icon-wrap {
+    margin-left: 0.06em !important;
+    margin-right: 0.06em !important;
+  }
+  .footer-bottom-row {
+    gap: 16px !important;
+  }
+  .footer-legal-col > * + * {
+    margin-top: 2px !important;
+  }
+  .footer-legal-links {
+    gap: 8px !important;
+  }
+  .footer-back-to-top {
+    gap: 6px !important;
+  }
 }
 
 /* ==========================================================================
    2. DESKTOP & LARGER SCREENS (Laptops, Desktops: >= 769px)
    ========================================================================== */
+
 @media screen and (min-width: 769px) {
 
   /* --- Navigation (Nav.jsx) --- */
@@ -749,5 +818,68 @@
   }
   .sec8-overlay-return-btn {
     padding: 10px 16px !important;
+  }
+
+  /* --- Footer (Desktop) --- */
+  .footer-section-root {
+    height: 100vh !important;
+  }
+  .footer-content-inner {
+    margin: 0 auto !important;
+    padding-top: 104px !important;
+    padding-bottom: 24px !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+  .footer-top-row {
+    gap: 0 !important;
+  }
+  .footer-group-heading {
+    margin-bottom: 10px !important;
+  }
+  .footer-link-list > * + * {
+    margin-top: 6px !important;
+  }
+  .footer-link-anchor {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.2s ease !important;
+  }
+  .footer-link-anchor-left:hover {
+    transform: translateX(8px) !important;
+    color: #ffffff !important;
+  }
+  .footer-link-anchor-right:hover {
+    transform: translateX(-8px) !important;
+    color: #ffffff !important;
+  }
+  .footer-divider-line {
+    margin-top: 16px !important;
+  }
+  .footer-right-group .footer-divider-line {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+  .footer-right-group > * + * {
+    margin-top: 28px !important;
+  }
+  .footer-bottom-layer > * + * {
+    margin-top: 18px !important;
+  }
+  .footer-orbit-icon-wrap {
+    margin-left: 0.06em !important;
+    margin-right: 0.06em !important;
+  }
+  .footer-bottom-row {
+    gap: 20px !important;
+  }
+  .footer-legal-col > * + * {
+    margin-top: 4px !important;
+  }
+  .footer-legal-links {
+    gap: 8px !important;
+  }
+  .footer-back-to-top {
+    gap: 6px !important;
   }
 }

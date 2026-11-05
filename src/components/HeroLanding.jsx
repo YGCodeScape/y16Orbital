@@ -282,15 +282,8 @@ export default function HeroLanding() {
   }, { scope: containerRef });
 
   return (
-    <section 
-      ref={containerRef}
-      className="herolandsec relative h-screen w-full overflow-hidden select-none"
-      style={{
-        paddingTop: '90px',
-        paddingBottom: '36px',
-        paddingLeft: '20px',
-        paddingRight: '20px',
-      }}
+    <section  ref={containerRef} className="herolandsec relative h-screen w-full overflow-hidden select-none"
+      style={{ paddingTop: '90px', paddingBottom: '36px', paddingLeft: '20px', paddingRight: '20px', marginBottom: '80px' }}
     >
       {/* =================================================================== */}
       {/* SECTION 1: HERO CONTENT                                             */}
@@ -335,7 +328,7 @@ export default function HeroLanding() {
         {/* Main Headline */}
         <div>
           <h2 className="sec2-headline-text font-bold tracking-tight text-neutral-900">
-            The Future Of<br />
+            Next Generation<br />
             <span style={{ color: '#842323' }}>Advertising </span> <br />
             Without Limits.
           </h2>

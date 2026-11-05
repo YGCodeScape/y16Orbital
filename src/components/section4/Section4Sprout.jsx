@@ -326,14 +326,9 @@ export default function Section4Sprout() {
   }, { scope: containerRef });
 
   return (
-    <section
-      ref={containerRef}
-      id="services"
+    <section ref={containerRef} id="services"
       className="sec4-sprout-section relative w-full h-screen flex items-center justify-center overflow-hidden select-none"
-      style={{
-        paddingLeft: '24px',
-        paddingRight: '24px',
-      }}
+      style={{ paddingLeft: '24px', paddingRight: '24px', marginBottom: '70px',}}
     >
       <div className="sec4-stage-container relative w-full max-w-7xl mx-auto flex items-center justify-center">
         {/* ───────────────────────────────────────────────────────────────── */}

@@ -10,6 +10,7 @@ import Section5WavyShowcase from './components/section5/Section5WavyShowcase';
 import Section6ProjectShowcase from './components/section6/Section6ProjectShowcase';
 import Section7PerspectiveHero from './components/section7/Section7PerspectiveHero';
 import Section8Pricing from './components/section8/Section8Pricing';
+import Footer from './components/footer/Footer';
 
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
@@ -130,6 +131,7 @@ export default function App() {
         <Section6ProjectShowcase />
         <Section7PerspectiveHero />
         <Section8Pricing />
+        <Footer />
       </main>
     </div>
   );
