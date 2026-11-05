@@ -188,7 +188,7 @@ export default function Section7PerspectiveHero() {
     <section
       ref={containerRef}
       className="sec7-perspective-section relative w-full h-screen overflow-hidden flex items-center justify-center select-none"
-      style={{ perspective: '1200px', marginBottom: '100px', }}
+      style={{ perspective: '1200px' }}
     >
 
       {/* ───────────────────────────────────────────────────────────────── */}

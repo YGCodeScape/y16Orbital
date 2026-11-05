@@ -7,8 +7,8 @@ import OrbitLogo from '../OrbitLogo';
 export default function FooterWordmark() {
   return (
     <div className="footer-wordmark-wrap select-none pointer-events-auto will-change-transform">
-      <div className="flex items-center tracking-[0.2em] sm:tracking-[0.15em] font-normal sm:font-medium text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.3)] leading-none text-[clamp(6rem,5vw,5rem)]"
-         style={{fontFamily: ' "K2D", sans-serif', }}
+      <div className="footer-WM flex items-center text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.3)] leading-none "
+         style={{fontFamily: ' "K2D", sans-serif', letterSpacing: '0.2em' }}
         >
         <span>Y16</span>
         {/* Orbital Geometric Icon */}

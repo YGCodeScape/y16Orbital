@@ -82,7 +82,7 @@ export default function Nav() {
               type="button"
               onClick={() => setIsMobileOpen(true)}
               aria-label="Open Mobile Navigation Menu"
-              className="rounded-full bg-neutral-200/80 hover:bg-neutral-300 flex items-center justify-center text-neutral-800 transition-colors cursor-pointer"
+              className="rounded-fullflex items-center justify-center text-neutral-800 transition-colors cursor-pointer"
               style={{ width: '38px', height: '38px' }}
             >
               <Menu style={{ width: '18px', height: '18px' }} />
@@ -108,19 +108,25 @@ export default function Nav() {
         {/* Top Header inside Full Screen Menu */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center" style={{ gap: '11px' }}>
-            <div style={{ width: '28px', height: '28px' }}>
-              <OrbitLogo size={28} className="text-neutral-900" />
-            </div>
-            <span className="font-semibold text-[17px] tracking-tight text-neutral-900">
-              Y16Orbital
-            </span>
+            <a href="#" className="wordmark flex items-center group select-none gap-[2px]" >
+             <span className="font-bold text-[17px] uppercase tracking-[2px] text-neutral-900"> Y16 </span>
+            
+             <div className="flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+               style={{ width: '28px', height: '28px' }} >
+                <OrbitLogo size={28} className="text-neutral-900 group-hover:text-black transition-colors" />
+             </div>
+            
+             <span className="font-bold text-[17px] uppercase tracking-[4px] text-neutral-900" >
+               rbital
+             </span>
+          </a>
           </div>
 
           <button 
             type="button"
             onClick={() => setIsMobileOpen(false)}
             aria-label="Close Mobile Navigation Menu"
-            className="rounded-full bg-neutral-200 hover:bg-neutral-300 flex items-center justify-center text-neutral-800 transition-colors cursor-pointer"
+            className="rounded-full flex items-center justify-center text-neutral-800 transition-colors cursor-pointer"
             style={{ width: '38px', height: '38px' }}
           >
             <X style={{ width: '18px', height: '18px' }} />

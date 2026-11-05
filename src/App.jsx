@@ -15,6 +15,12 @@ import Footer from './components/footer/Footer';
 // Register GSAP plugins globally
 gsap.registerPlugin(ScrollTrigger);
 
+// Prevent mobile address bar show/hide from triggering ScrollTrigger recalculations & scroll jumps
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+  autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
+});
+
 /**
  * Root Application Component
  * ─────────────────────────────────────────────────────────────────────────────
@@ -38,11 +44,12 @@ export default function App() {
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll runtime
     const lenis = new Lenis({
-      duration: 1.70,
+      duration: 1.5,
       easing: (time) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      syncTouch: false, // Allow clean native mobile touch scroll without synthetic fighting
     });
 
     // Make lenis accessible globally for programmatic scrolling
@@ -85,13 +92,20 @@ export default function App() {
       window.addEventListener('load', handleWindowLoad);
     }
 
-    // D. Debounced resize refresh for viewport stability
+    // D. Debounced resize refresh for viewport stability (WIDTH ONLY)
+    // Mobile browsers dynamically change innerHeight when the address bar collapses.
+    // Filtering out vertical-only resizes stops ScrollTrigger from unpinning & snapping back.
     let resizeTimer = null;
+    let lastWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
     const handleResize = () => {
+      const currentWidth = window.innerWidth;
+      if (currentWidth === lastWidth) return; // Ignore mobile address bar vertical toggling
+      lastWidth = currentWidth;
+
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 150);
+      }, 200);
     };
     window.addEventListener('resize', handleResize);
 

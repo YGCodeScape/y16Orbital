@@ -283,7 +283,7 @@ export default function HeroLanding() {
 
   return (
     <section  ref={containerRef} className="herolandsec relative h-screen w-full overflow-hidden select-none"
-      style={{ paddingTop: '90px', paddingBottom: '36px', paddingLeft: '20px', paddingRight: '20px', marginBottom: '80px' }}
+      style={{ paddingTop: '90px', paddingBottom: '36px', paddingLeft: '20px', paddingRight: '20px' }}
     >
       {/* =================================================================== */}
       {/* SECTION 1: HERO CONTENT                                             */}
@@ -329,7 +329,7 @@ export default function HeroLanding() {
         <div>
           <h2 className="sec2-headline-text font-bold tracking-tight text-neutral-900">
             Next Generation<br />
-            <span style={{ color: '#842323' }}>Advertising </span> <br />
+            <span style={{ color: '#E8590C' }}>Advertising </span> <br />
             Without Limits.
           </h2>
         </div>

@@ -404,7 +404,7 @@
     min-height: 100vh !important;
   }
   .footer-section-root img {
-    object-position: 72% 30% !important;
+    object-position: center !important;
   }
   .footer-content-inner {
     margin: 0 auto !important;
@@ -464,6 +464,9 @@
   }
   .footer-back-to-top {
     gap: 6px !important;
+  }
+  .footer-WM {
+    font-size: 2rem;
   }
 }
 
@@ -881,5 +884,8 @@
   }
   .footer-back-to-top {
     gap: 6px !important;
+  }
+  .footer-WM {
+    font-size: 5rem;
   }
 }

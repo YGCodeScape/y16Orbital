@@ -7,6 +7,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  overscroll-behavior-y: none;
+}
+
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -81,7 +85,6 @@ body {
 }
 
 #main-nav.nav-theme-white .nav-mobile-btn-wrap button {
-  background-color: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
 }
 
