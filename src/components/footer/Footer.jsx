@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
   const footerRef = useRef(null);
+  const bgWrapRef = useRef(null);
   const bgImgRef = useRef(null);
 
   useGSAP(() => {
@@ -36,7 +37,29 @@ export default function Footer() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. INITIAL STATES SETUP
+    // 2. PARALLAX BACKGROUND UPWARD GLIDE (Matching Section 3 & Section 7)
+    // ─────────────────────────────────────────────────────────────────────────
+    if (bgImgRef.current && !prefersReducedMotion) {
+      gsap.fromTo(
+        bgImgRef.current,
+        { yPercent: 8 },
+        {
+          yPercent: -8,
+          ease: 'none',
+          scrollTrigger: {
+            id: 'footer-bg-parallax',
+            trigger: footerRef.current,
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 3. INITIAL STATES SETUP
     // ─────────────────────────────────────────────────────────────────────────
     const dividers = footerRef.current.querySelectorAll('.footer-divider-line');
     const leftLinks = footerRef.current.querySelectorAll('.footer-left-group .footer-link-item');
@@ -51,6 +74,9 @@ export default function Footer() {
         y: 0,
         scaleX: 1,
       });
+      if (bgWrapRef.current) {
+        gsap.set(bgWrapRef.current, { opacity: 1, scale: 1 });
+      }
       return;
     }
 
@@ -61,7 +87,7 @@ export default function Footer() {
     gsap.set(bottomBar, { opacity: 0, y: 16 });
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. SEQUENTIAL GSAP REVEAL TIMELINE
+    // 4. SEQUENTIAL GSAP REVEAL TIMELINE
     // ─────────────────────────────────────────────────────────────────────────
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -72,10 +98,10 @@ export default function Footer() {
       },
     });
 
-    // STAGE 1: Background arrives (subtle opacity 0.85 -> 1, scale 1.035 -> 1)
-    if (bgImgRef.current) {
+    // STAGE 1: Background arrives (subtle opacity 0.85 -> 1, scale 1.035 -> 1 on wrapper)
+    if (bgWrapRef.current) {
       tl.fromTo(
-        bgImgRef.current,
+        bgWrapRef.current,
         { opacity: 0.85, scale: 1.035 },
         { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
         0
@@ -152,20 +178,23 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
+      id="contact"
       className="footer-section-root relative w-full min-h-screen h-screen overflow-hidden text-white flex flex-col justify-between select-none"
     >
       {/* ───────────────────────────────────────────────────────────────── */}
-      {/* FULL BLEED BACKGROUND IMAGE & SUBTLE VIGNETTES                     */}
+      {/* FULL BLEED BACKGROUND IMAGE WITH UPWARD GLIDING PARALLAX          */}
       {/* ───────────────────────────────────────────────────────────────── */}
       <div className="absolute inset-0 -z-10 overflow-hidden bg-neutral-900 pointer-events-none">
-        <img
-          ref={bgImgRef}
-          src="/bannersec/footerBanner.png"
-          alt="Y16 Orbital Campaign Talent"
-          className="w-full h-full object-cover object-[center_35%] lg:object-center select-none pointer-events-none will-change-transform"
-          loading="eager"
-          decoding="async"
-        />
+        <div ref={bgWrapRef} className="absolute inset-0 w-full h-full will-change-transform">
+          <img
+            ref={bgImgRef}
+            src="/bannersec/footerBanner.png"
+            alt="Y16 Orbital Campaign Talent"
+            className="absolute top-[-15%] left-0 w-full h-[130%] object-cover object-[center_35%] lg:object-center select-none pointer-events-none will-change-transform"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
         {/* Top gradient for nav readability */}
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/40 via-black/15 to-transparent pointer-events-none" />
         {/* Bottom gradient for legal bar & wordmark clarity */}

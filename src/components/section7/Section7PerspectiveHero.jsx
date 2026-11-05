@@ -36,13 +36,14 @@ const BG_CARDS = [
 export default function Section7PerspectiveHero() {
   const containerRef = useRef(null);
   const heroCardRef = useRef(null);
+  const heroImgRef = useRef(null);
   const bgCardNodesRef = useRef([]);
   const metadataRef = useRef(null);
-  const dockRef = useRef(null);
 
   useGSAP(() => {
     if (!containerRef.current || !heroCardRef.current) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth <= 768;
 
     // Dynamic scale based on actual available half-width from center
@@ -54,34 +55,56 @@ export default function Section7PerspectiveHero() {
       return Math.min(1, Math.max(0.35, availableHalfWidth / 480));
     };
 
-    // Initial Large Full-Bleed Landscape Dimensions -> Final Portrait Card
+    // Full 100% Viewport Dimensions for Initial State (matching width & height)
     const initialWidth = isMobile
       ? Math.max(320, window.innerWidth - 24)
       : Math.min(window.innerWidth - 48, 1440);
     const initialHeight = isMobile
-      ? Math.min(window.innerHeight * 0.52, 380)
-      : Math.min(window.innerHeight * 0.62, 540);
+      ? Math.max(480, window.innerHeight - 24)
+      : Math.max(500, window.innerHeight - 48);
     const finalWidth = isMobile ? 270 : 320;
     const finalHeight = isMobile ? 360 : 420;
 
     const bgCards = bgCardNodesRef.current.filter(Boolean);
 
+    if (prefersReducedMotion) {
+      gsap.set(heroCardRef.current, {
+        width: finalWidth,
+        height: finalHeight,
+        borderRadius: 28,
+      });
+      if (heroImgRef.current) {
+        gsap.set(heroImgRef.current, { yPercent: 0 });
+      }
+      if (metadataRef.current) {
+        gsap.set(metadataRef.current, { opacity: 1, y: 0 });
+      }
+      return;
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // INITIAL VISUAL STATES
     // ─────────────────────────────────────────────────────────────────────────
 
-    // 1. Hero Card: Starts at FULL width/landscape immediately in center
+    // 1. Hero Card: Starts at FULL 100% viewport dimensions (wide cinematic billboard)
     gsap.set(heroCardRef.current, {
       width: initialWidth,
       height: initialHeight,
       x: 0,
       y: 0,
       scale: 1,
-      borderRadius: 24,
+      borderRadius: isMobile ? 24 : 32,
       transformOrigin: 'center center',
     });
 
-    // 2. 15 Background Mini Cards: Placed deep in 3D behind the hero (z: -500)
+    // 2. Parallax Image Initial Offset (ready for smooth upward glide)
+    if (heroImgRef.current) {
+      gsap.set(heroImgRef.current, {
+        yPercent: 10,
+      });
+    }
+
+    // 3. 15 Background Mini Cards: Placed deep in 3D behind the hero (z: -500)
     gsap.set(bgCards, {
       scale: 0.15,
       opacity: 0,
@@ -95,7 +118,7 @@ export default function Section7PerspectiveHero() {
       transformOrigin: 'center center',
     });
 
-    // 3. Metadata Bar: Hidden initially
+    // 4. Metadata Bar: Hidden initially
     if (metadataRef.current) {
       gsap.set(metadataRef.current, {
         opacity: 0,
@@ -104,7 +127,29 @@ export default function Section7PerspectiveHero() {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // SINGLE PINNED GSAP TIMELINE
+    // 1. PARALLAX UPWARD GLIDE: Approaches into Section 7 (matching Section 3)
+    // ─────────────────────────────────────────────────────────────────────────
+    if (heroImgRef.current) {
+      gsap.fromTo(
+        heroImgRef.current,
+        { yPercent: 10 },
+        {
+          yPercent: 0,
+          ease: 'none',
+          scrollTrigger: {
+            id: 'sec7-img-approach',
+            trigger: containerRef.current,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 2. SINGLE PINNED GSAP TIMELINE
     // Smooth ~2.0 viewport heights scrub distance with continuous progressive shrink
     // ─────────────────────────────────────────────────────────────────────────
     const scrollTl = gsap.timeline({
@@ -121,19 +166,9 @@ export default function Section7PerspectiveHero() {
       },
     });
 
-    // Top Dock Pill subtle fade out as user scrolls deep into the 3D showcase
-    if (dockRef.current) {
-      scrollTl.to(dockRef.current, {
-        opacity: 0,
-        y: -16,
-        duration: 1.5,
-        ease: 'power1.out',
-      }, 0);
-    }
-
     // CONTINUOUS PROGRESSIVE SHRINK:
-    // As the user starts scrolling, the hero banner begins shrinking from wide
-    // landscape into the portrait card continuously from t=0 through t=6.0
+    // As the user starts scrolling, the hero banner begins shrinking from 100% full size
+    // into the portrait card continuously from t=0 through t=6.0
     scrollTl.to(heroCardRef.current, {
       width: finalWidth,
       height: finalHeight,
@@ -141,6 +176,16 @@ export default function Section7PerspectiveHero() {
       duration: 6.0,
       ease: 'power1.inOut',
     }, 0);
+
+    // CONTINUOUS PARALLAX UPWARD GLIDE WHILE PINNED:
+    // Glides smoothly from 0 to -10% as the card shrinks, giving rich cinematic depth
+    if (heroImgRef.current) {
+      scrollTl.to(heroImgRef.current, {
+        yPercent: -10,
+        ease: 'none',
+        duration: 6.0,
+      }, 0);
+    }
 
     // 3D MINI CARDS EMERGENCE:
     // As the banner contracts, the 15 mini cards fly forward along the Z-axis
@@ -187,10 +232,10 @@ export default function Section7PerspectiveHero() {
   return (
     <section
       ref={containerRef}
+      id="production"
       className="sec7-perspective-section relative w-full h-screen overflow-hidden flex items-center justify-center select-none"
       style={{ perspective: '1200px' }}
     >
-
       {/* ───────────────────────────────────────────────────────────────── */}
       {/* 1. BACKGROUND 3D PERSPECTIVE MATRIX (15 Mini Art Cards)           */}
       {/* ───────────────────────────────────────────────────────────────── */}
@@ -203,11 +248,6 @@ export default function Section7PerspectiveHero() {
             key={card.id}
             ref={(node) => { bgCardNodesRef.current[index] = node; }}
             className="sec7-bg-card absolute will-change-transform"
-            style={{
-              width: '128px',
-              height: '144px',
-              transformStyle: 'preserve-3d',
-            }}
           >
             {/* Inner wrapper exclusively handles CSS hover to prevent transform collision */}
             <div className="w-full h-full rounded-2xl overflow-hidden shadow-xl border border-white/80 bg-neutral-900 pointer-events-auto transition-transform duration-300">
@@ -236,26 +276,29 @@ export default function Section7PerspectiveHero() {
           transformOrigin: 'center center',
         }}
       >
-        {/* Direct image naturally filling the card with center-top focus on the model */}
-        <img
-          src="/bannersec/banner2.png"
-          alt="Synthetic AI Talent Campaign"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          className="w-full h-full object-cover select-none pointer-events-none"
-          style={{ objectPosition: 'center 20%' }}
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
-        />
+        {/* Parallax Image Wrapper matching Section 3's height 130% top -15% coverage */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+          <img
+            ref={heroImgRef}
+            src="/bannersec/banner2.png"
+            alt="Synthetic AI Talent Campaign"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute top-[-15%] left-0 w-full h-[130%] object-cover select-none pointer-events-none will-change-transform"
+            style={{ objectPosition: 'center 20%' }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
 
         {/* Bottom Metadata Bar */}
         <div
           ref={metadataRef}
           className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between p-3 rounded-2xl bg-black/50 backdrop-blur-md border border-white/15 text-white"
         >
-          <div className="flex items-center gap-2.5" style={{paddingInline: '12px', paddingBlock: '6px' }}>
+          <div className="flex items-center gap-2.5 px-3 py-1.5">
             <div className="w-8 h-8 rounded-xl bg-orange-500/90 flex items-center justify-center font-bold text-xs uppercase tracking-wider shadow-xs">
               Y16
             </div>
@@ -268,7 +311,7 @@ export default function Section7PerspectiveHero() {
               </span>
             </div>
           </div>
-          <span className="text-[11px] font-medium text-orange-200" style={{paddingRight: '20px'}}>
+          <span className="text-[11px] font-medium text-orange-200 pr-5">
             01 // Production
           </span>
         </div>

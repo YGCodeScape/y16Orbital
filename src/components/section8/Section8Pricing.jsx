@@ -23,13 +23,38 @@ export default function Section8Pricing() {
   const card2Ref = useRef(null);
   const bottomStripRef = useRef(null);
 
+  const handleCustomProjectClick = (e) => {
+    e.preventDefault();
+    if (window.__lenis) {
+      window.__lenis.scrollTo('#contact', { duration: 1.4 });
+    } else {
+      document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useGSAP(() => {
     if (!sectionRef.current) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const headlineLines = headlineLinesRef.current.filter(Boolean);
+
+    if (prefersReducedMotion) {
+      if (headlineLines.length > 0) {
+        gsap.set(headlineLines, { opacity: 1, y: 0 });
+      }
+      if (card1Ref.current && card2Ref.current) {
+        gsap.set([card1Ref.current, card2Ref.current], { opacity: 1, y: 0, scale: 1 });
+      }
+      if (bottomStripRef.current) {
+        const stripElements = bottomStripRef.current.querySelectorAll('.sec8-strip-stagger');
+        gsap.set(stripElements, { opacity: 1, y: 0 });
+      }
+      return;
+    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // 1. EDITORIAL HEADLINE: Line-by-line subtle upward movement
     // ─────────────────────────────────────────────────────────────────────────
-    const headlineLines = headlineLinesRef.current.filter(Boolean);
     if (headlineLines.length > 0) {
       gsap.fromTo(
         headlineLines,
@@ -136,7 +161,7 @@ export default function Section8Pricing() {
         {/* ───────────────────────────────────────────────────────────────── */}
         <div className="sec8-grid-container w-full max-w-[1240px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 flex-1">
           
-          {/* 1. LEFT EDITORIAL HEADLINE (Snug spacing, no huge canyon) */}
+          {/* 1. LEFT EDITORIAL HEADLINE */}
           <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 flex flex-col justify-center">
             <h2 className="sec8-headline text-4xl sm:text-5xl lg:text-[54px] font-bold text-neutral-900 tracking-tight leading-[1.08]">
               <span
@@ -177,6 +202,7 @@ export default function Section8Pricing() {
             {/* ───────────────────────────────────────────────────────────── */}
             <div
               ref={card1Ref}
+              id="start-a-campaign"
               className="sec8-plan-card h-full min-h-[500px] bg-white rounded-[28px] border border-neutral-200/90 shadow-[0_8px_30px_rgba(0,0,0,0.03)] flex flex-col justify-between relative overflow-visible transition-all duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.06)] will-change-transform group"
             >
               {/* TOP RIGHT "SEE ALL" CIRCULAR BUTTON */}
@@ -219,7 +245,7 @@ export default function Section8Pricing() {
                     </div>
                   </div>
 
-                  {/* Core Feature Highlights (Fills middle void seamlessly) */}
+                  {/* Core Feature Highlights */}
                   <ul className="space-y-2.5 my-4">
                     <li className="flex items-center gap-2.5 text-xs text-neutral-600 font-medium">
                       <Check className="w-3.5 h-3.5 text-neutral-800 stroke-[2.5] shrink-0" />
@@ -254,7 +280,8 @@ export default function Section8Pricing() {
               {/* Bottom CTA Button */}
               <button
                 type="button"
-                className="sec8-card-btn w-full rounded-full bg-neutral-900 text-white text-xs sm:text-sm font-semibold hover:bg-neutral-800 transition-colors duration-200 flex items-center justify-center group"
+                onClick={() => setActiveOverlay('campaign')}
+                className="sec8-card-btn w-full rounded-full bg-neutral-900 text-white text-xs sm:text-sm font-semibold hover:bg-neutral-800 transition-colors duration-200 flex items-center justify-center group cursor-pointer"
               >
                 Start a Project
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -285,7 +312,7 @@ export default function Section8Pricing() {
                       type="button"
                       onClick={() => setActiveOverlay(null)}
                       aria-label="Close feature details"
-                      className="w-8 h-8 rounded-full border border-neutral-700 hover:border-white text-neutral-400 hover:text-white flex items-center justify-center transition-all hover:rotate-90"
+                      className="w-8 h-8 rounded-full border border-neutral-700 hover:border-white text-neutral-400 hover:text-white flex items-center justify-center transition-all hover:rotate-90 cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -338,7 +365,7 @@ export default function Section8Pricing() {
                   <button
                     type="button"
                     onClick={() => setActiveOverlay(null)}
-                    className="sec8-overlay-close-btn w-full rounded-full bg-white text-neutral-950 font-bold text-xs hover:bg-neutral-200 transition-colors"
+                    className="sec8-overlay-close-btn w-full rounded-full bg-white text-neutral-950 font-bold text-xs hover:bg-neutral-200 transition-colors cursor-pointer"
                   >
                     Close Details
                   </button>
@@ -351,9 +378,9 @@ export default function Section8Pricing() {
             {/* ───────────────────────────────────────────────────────────── */}
             <div
               ref={card2Ref}
-              className="sec8-plan-card h-full min-h-[500px] bg-white rounded-[28px]  shadow-[0_12px_36px_rgba(0,0,0,0.06)] flex flex-col justify-between relative overflow-visible transition-all duration-300 hover:shadow-[0_20px_48px_rgba(0,0,0,0.1)] will-change-transform group"
+              className="sec8-plan-card h-full min-h-[500px] bg-white rounded-[28px] border border-neutral-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.06)] flex flex-col justify-between relative overflow-visible transition-all duration-300 hover:shadow-[0_20px_48px_rgba(0,0,0,0.1)] will-change-transform group"
             >
-              {/* TOP FLOATING BADGE (100% UNCLIPPED & FULLY VISIBLE) */}
+              {/* TOP FLOATING BADGE */}
               <div className="sec8-popular-badge absolute -top-3.5 left-7 bg-neutral-900 text-white text-[11px] font-bold rounded-full shadow-md flex items-center gap-1.5 z-20">
                 <Sparkles className="w-3 h-3 text-orange-400 fill-orange-400" />
                 Most Popular
@@ -387,7 +414,7 @@ export default function Section8Pricing() {
                     <button
                       type="button"
                       onClick={() => setBillingCycle('monthly')}
-                      className={`sec8-toggle-btn rounded-full text-xs font-semibold transition-all duration-200 ${
+                      className={`sec8-toggle-btn rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         billingCycle === 'monthly'
                           ? 'bg-neutral-900 text-white shadow-xs'
                           : 'text-neutral-600 hover:text-neutral-900'
@@ -398,7 +425,7 @@ export default function Section8Pricing() {
                     <button
                       type="button"
                       onClick={() => setBillingCycle('yearly')}
-                      className={`sec8-toggle-btn rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 ${
+                      className={`sec8-toggle-btn rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                         billingCycle === 'yearly'
                           ? 'bg-neutral-900 text-white shadow-xs'
                           : 'text-neutral-600 hover:text-neutral-900'
@@ -437,7 +464,7 @@ export default function Section8Pricing() {
                     </div>
                   </div>
 
-                  {/* Core Feature Highlights (Fills middle void seamlessly) */}
+                  {/* Core Feature Highlights */}
                   <ul className="space-y-2.5 my-4">
                     <li className="flex items-center gap-2.5 text-xs text-neutral-600 font-medium">
                       <Check className="w-3.5 h-3.5 text-[#E8590C] stroke-[2.5] shrink-0" />
@@ -472,7 +499,8 @@ export default function Section8Pricing() {
               {/* Bottom CTA Button */}
               <button
                 type="button"
-                className="sec8-card-btn w-full rounded-full bg-[#E8590C] hover:bg-[#d64f09] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center group"
+                onClick={() => setActiveOverlay('membership')}
+                className="sec8-card-btn w-full rounded-full bg-[#E8590C] hover:bg-[#d64f09] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center group cursor-pointer"
               >
                 Become a Member
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -503,7 +531,7 @@ export default function Section8Pricing() {
                       type="button"
                       onClick={() => setActiveOverlay(null)}
                       aria-label="Close feature details"
-                      className="w-8 h-8 rounded-full border border-neutral-700 hover:border-white text-neutral-400 hover:text-white flex items-center justify-center transition-all hover:rotate-90"
+                      className="w-8 h-8 rounded-full border border-neutral-700 hover:border-white text-neutral-400 hover:text-white flex items-center justify-center transition-all hover:rotate-90 cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -560,7 +588,7 @@ export default function Section8Pricing() {
                   <button
                     type="button"
                     onClick={() => setActiveOverlay(null)}
-                    className="sec8-overlay-close-btn w-full rounded-full bg-[#E8590C] text-white font-bold text-xs hover:bg-[#d64f09] transition-colors"
+                    className="sec8-overlay-close-btn w-full rounded-full bg-[#E8590C] text-white font-bold text-xs hover:bg-[#d64f09] transition-colors cursor-pointer"
                   >
                     Got It, Return to Plan
                   </button>
@@ -640,7 +668,7 @@ export default function Section8Pricing() {
                   loading="lazy"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />           
-                </div>
+              </div>
             </div>
 
             {/* Vertical Divider Line */}
@@ -661,7 +689,8 @@ export default function Section8Pricing() {
           <div className="sec8-strip-stagger shrink-0">
             <a
               href="#contact"
-              className="sec8-custom-link inline-flex items-center text-xs sm:text-sm font-semibold text-neutral-900 hover:text-[#E8590C] transition-colors whitespace-nowrap group"
+              onClick={handleCustomProjectClick}
+              className="sec8-custom-link inline-flex items-center text-xs sm:text-sm font-semibold text-neutral-900 hover:text-[#E8590C] transition-colors whitespace-nowrap group cursor-pointer"
             >
               <span className="underline decoration-neutral-300 underline-offset-4 group-hover:decoration-[#E8590C]">
                 Discuss a Custom Project

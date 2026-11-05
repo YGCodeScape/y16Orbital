@@ -17,14 +17,9 @@ const FEATURED_PROJECTS = [
     title: 'Connect, Create, Commerce',
     description: 'Offering buyers a chance to own a piece of that narrative through bespoke AI talent and high-fashion capsules.',
     actionLabel: 'How it works?',
-    cardTheme: 'light', // light card container
-    type: 'stacked-cards',
+    target: '#services',
     frontImage: '/works/work14.jpg',
     backImages: ['/works/work2.jpg', '/works/work7.jpg'],
-    pills: [
-      { text: 'Play Video', icon: 'play', position: 'top-left' },
-      { text: '@robin', icon: 'tag', position: 'top-right' },
-    ],
   },
   {
     id: 'art-breathes-commerce',
@@ -32,12 +27,8 @@ const FEATURED_PROJECTS = [
     title: 'Where Art Breathes Commerce',
     description: 'Artistic spirit with commercial viability, providing platform credibility and cinematic spatial renders.',
     actionLabel: 'Read more',
-    cardTheme: 'blue', // vibrant electric cobalt container
-    type: 'electric-blue',
+    target: '#services',
     image: '/works/work16.jpg',
-    pills: [
-      { text: 'CGI Render', icon: 'sparkle', position: 'top-right' },
-    ],
   },
   {
     id: 'spin-art-gold',
@@ -45,8 +36,7 @@ const FEATURED_PROJECTS = [
     title: 'Spin Your Art into Gold',
     description: 'Unleash your artistic potential, where innovation and creativity converge into viral brand narratives.',
     actionLabel: 'Join us now',
-    cardTheme: 'vibrant',
-    type: 'wide-banner',
+    target: '#pricing',
     image: '/works/work4.jpg',
     tags: ['Generative Studio', 'Commercial Direction', 'Multi-channel'],
   },
@@ -56,10 +46,8 @@ const FEATURED_PROJECTS = [
     title: 'Axen Power at Your Wrist',
     description: 'Zero physical camera shoots, infinite fidelity. Hyper-realistic mechanical rendering and lighting for next-generation tech.',
     actionLabel: 'Explore project',
-    cardTheme: 'dark', // sleek obsidian card
-    type: 'dark-sleek',
+    target: '#production',
     image: '/works/work3.jpg',
-    tags: ['Mechanical CGI', '4K Commercial'],
   },
 ];
 
@@ -71,14 +59,32 @@ export default function Section6ProjectShowcase() {
   const row1Ref = useRef(null);
   const row2Ref = useRef(null);
 
+  const handleScrollTo = (target) => {
+    if (!target) return;
+    if (window.__lenis) {
+      window.__lenis.scrollTo(target, { duration: 1.4, offset: -20 });
+    } else {
+      document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useGSAP(() => {
     if (!containerRef.current) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const words = headlineWordsRef.current.filter(Boolean);
+
+    if (prefersReducedMotion) {
+      if (words.length > 0) {
+        gsap.set(words, { opacity: 1, filter: 'blur(0px)', y: 0 });
+      }
+      return;
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // 1. Headline Scrubbed Reveal (Blur + Opacity + Y)
-    // As seen in the reference, scrolling smoothly reveals each word with blur removal
+    // Scrolling smoothly reveals each word with blur removal
     // ─────────────────────────────────────────────────────────────────────────
-    const words = headlineWordsRef.current.filter(Boolean);
     if (words.length > 0) {
       gsap.fromTo(
         words,
@@ -180,7 +186,8 @@ export default function Section6ProjectShowcase() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef}
+    <section
+      ref={containerRef}
       className="sec6-showcase-section relative w-full text-neutral-900 overflow-hidden"
     >
       {/* Background Decorative Ambient Radial Gradient */}
@@ -196,8 +203,7 @@ export default function Section6ProjectShowcase() {
         {/* Header Block: Eyebrow + Staggered Blur Headline */}
         {/* ─────────────────────────────────────────────────────────────────── */}
         <div className="sec6-header-block text-center">
-
-          <h2 className="sec6-headline text-3xl sm:text-5xl lg:text-6xl tracking-tight text-neutral-900 max-w-4xl mx-auto leading-[1.12]">
+          <h2 className="sec6-headline tracking-tight text-neutral-900 max-w-4xl mx-auto leading-[1.12]">
             {HEADLINE_WORDS.map((word, idx) => (
               <span
                 key={idx}
@@ -215,17 +221,16 @@ export default function Section6ProjectShowcase() {
         {/* ─────────────────────────────────────────────────────────────────── */}
 
         {/* ROW 1: Card 1 (Stack + Pills) & Card 2 (Electric Cobalt 3D) */}
-        <div ref={row1Ref}
+        <div
+          ref={row1Ref}
           className="sec6-row1-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
         >
-          {/* CARD 1: Connect, Create, Commerce (5 or 6 cols) */}
+          {/* CARD 1: Connect, Create, Commerce (6 cols) */}
           <div className="sec6-project-card lg:col-span-6 bg-white rounded-3xl border border-neutral-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex flex-col justify-between transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] group">
             {/* Visual Top Stage: Interactive Card Stack & Floating Badges */}
             <div className="sec6-card-stage relative w-full h-[280px] sm:h-[340px] bg-[#F4F4F6] rounded-2xl overflow-hidden flex items-center justify-center">
-
-              {/* Floating Pill Top Right: @robin */}
-              <div className="sec6-float-pill absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-[#2563EB] text-white rounded-full text-xs font-semibold"
-                style={{paddingInline: '12px', paddingBlock: '6px' }}>
+              {/* Floating Pill Top Right: @Y16 */}
+              <div className="sec6-float-pill absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-[#2563EB] text-white rounded-full text-xs font-semibold px-3 py-1.5 shadow-sm">
                 <span>@Y16</span>
               </div>
 
@@ -269,8 +274,7 @@ export default function Section6ProjectShowcase() {
                     loading="lazy"
                   />
                   {/* Prada Branding Pill Overlay */}
-                  <div className="absolute top-2.5 left-1/2 -translate-x-1/2 bg-black/45 backdrop-blur-sm text-white text-[10px] tracking-widest font-black uppercase rounded-full"
-                     style={{paddingInline: '6px', paddingBlock: '6px' }}>
+                  <div className="absolute top-2.5 left-1/2 -translate-x-1/2 bg-black/45 backdrop-blur-sm text-white text-[10px] tracking-widest font-black uppercase rounded-full px-2 py-1">
                     PRADA
                   </div>
                 </div>
@@ -288,10 +292,14 @@ export default function Section6ProjectShowcase() {
               <p className="sec6-card-desc text-neutral-500 text-sm leading-relaxed">
                 {FEATURED_PROJECTS[0].description}
               </p>
-              <div className="sec6-card-btn inline-flex items-center gap-1.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-700 bg-neutral-50 hover:bg-neutral-100 transition-colors">
+              <button
+                type="button"
+                onClick={() => handleScrollTo(FEATURED_PROJECTS[0].target)}
+                className="sec6-card-btn inline-flex items-center gap-1.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-700 bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-pointer"
+              >
                 {FEATURED_PROJECTS[0].actionLabel}
                 <ChevronRight className="w-3.5 h-3.5 text-neutral-500" />
-              </div>
+              </button>
             </div>
           </div>
 
@@ -305,19 +313,19 @@ export default function Section6ProjectShowcase() {
                 className="absolute w-48 h-8 rounded-full bg-white/25 blur-md"
                 style={{ top: '65%', transform: 'rotate(-2deg)' }}
               />
-              <div className="absolute w-32 h-6 rounded-full bg-white/20 blur-md"
+              <div
+                className="absolute w-32 h-6 rounded-full bg-white/20 blur-md"
                 style={{ top: '75%', transform: 'rotate(1deg)' }}
               />
 
               {/* CGI Render Tag Top Right */}
-              <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium"
-                style={{paddingInline: '12px', paddingBlock: '6px' }}>
+              <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white rounded-full text-xs font-medium px-3 py-1.5">
                 <Sparkles className="w-3 h-3 text-white" />
                 CGI Concept
               </div>
 
-              {/* 3D Geometric Art Artwork */}
-              <div className="relative z-10 w-[400px] h-64 rounded-2xl overflow-hidden border-2 border-white/40 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1">
+              {/* 3D Geometric Art Artwork (fluid max-width to eliminate mobile overflow) */}
+              <div className="relative z-10 w-full max-w-[380px] h-52 sm:h-64 rounded-2xl overflow-hidden border-2 border-white/40 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1">
                 <img
                   src={FEATURED_PROJECTS[1].image}
                   alt="Where Art Breathes Commerce"
@@ -338,16 +346,21 @@ export default function Section6ProjectShowcase() {
               <p className="sec6-card-desc text-neutral-500 text-sm leading-relaxed">
                 {FEATURED_PROJECTS[1].description}
               </p>
-              <div className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-neutral-900 group-hover:text-blue-600 transition-colors">
+              <button
+                type="button"
+                onClick={() => handleScrollTo(FEATURED_PROJECTS[1].target)}
+                className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-neutral-900 group-hover:text-blue-600 transition-colors cursor-pointer"
+              >
                 {FEATURED_PROJECTS[1].actionLabel}
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-              </div>
+              </button>
             </div>
           </div>
         </div>
 
         {/* ROW 2: Card 3 (Wide Expressive Art Banner) & Card 4 (Obsidian Luxury Tech) */}
-        <div ref={row2Ref}
+        <div
+          ref={row2Ref}
           className="sec6-row2-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
         >
           {/* CARD 3: Spin Your Art into Gold (7 cols) */}
@@ -386,10 +399,14 @@ export default function Section6ProjectShowcase() {
               <p className="sec6-card-desc text-neutral-500 text-sm leading-relaxed">
                 {FEATURED_PROJECTS[2].description}
               </p>
-              <div className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-neutral-900 group-hover:text-blue-600 transition-colors cursor-pointer">
+              <button
+                type="button"
+                onClick={() => handleScrollTo(FEATURED_PROJECTS[2].target)}
+                className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-neutral-900 group-hover:text-blue-600 transition-colors cursor-pointer"
+              >
                 {FEATURED_PROJECTS[2].actionLabel}
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
+              </button>
             </div>
           </div>
 
@@ -406,9 +423,14 @@ export default function Section6ProjectShowcase() {
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
 
               {/* Next Project Circular Arrow Button (matching reference) */}
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-45">
+              <button
+                type="button"
+                onClick={() => handleScrollTo(FEATURED_PROJECTS[3].target)}
+                aria-label="View Project"
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-45 cursor-pointer"
+              >
                 <ArrowUpRight className="w-5 h-5" />
-              </div>
+              </button>
             </div>
 
             {/* Content Bottom Area */}
@@ -422,10 +444,14 @@ export default function Section6ProjectShowcase() {
               <p className="sec6-card-desc text-neutral-400 text-sm leading-relaxed">
                 {FEATURED_PROJECTS[3].description}
               </p>
-              <div className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-blue-400 transition-colors cursor-pointer">
+              <button
+                type="button"
+                onClick={() => handleScrollTo(FEATURED_PROJECTS[3].target)}
+                className="sec6-card-btn inline-flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-blue-400 transition-colors cursor-pointer"
+              >
                 {FEATURED_PROJECTS[3].actionLabel}
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-              </div>
+              </button>
             </div>
           </div>
         </div>

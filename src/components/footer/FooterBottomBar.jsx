@@ -19,9 +19,21 @@ export default function FooterBottomBar() {
       <div className="footer-legal-col flex flex-col">
         <p className="text-white/90">© 2026 Y16 Orbital</p>
         <div className="footer-legal-links flex items-center text-white/70">
-          <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+          <a
+            href="#privacy"
+            onClick={(e) => e.preventDefault()}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Privacy Policy
+          </a>
           <span>·</span>
-          <a href="#terms" className="hover:text-white transition-colors">Terms</a>
+          <a
+            href="#terms"
+            onClick={(e) => e.preventDefault()}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Terms
+          </a>
         </div>
       </div>
 

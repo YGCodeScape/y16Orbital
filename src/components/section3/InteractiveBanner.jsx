@@ -38,8 +38,8 @@ export default function InteractiveBanner() {
   const imageIndexRef = useRef(0);
   const zIndexCounter = useRef(10);
 
-  // Parallax background image glide on scroll & contextSafe lifecycle setup
-  const { contextSafe } = useGSAP(() => {
+  // Parallax background image glide on scroll
+  useGSAP(() => {
     if (!parallaxImgRef.current || !bannerWrapRef.current) return;
 
     // Smooth upward gliding motion as the user scrolls down
@@ -61,9 +61,8 @@ export default function InteractiveBanner() {
 
   /**
    * Spawns or recycles a card from the pool at cursor coordinates.
-   * Wrapped in contextSafe for reliable lifecycle cleanup.
    */
-  const handlePointerMove = contextSafe((e) => {
+  const handlePointerMove = (e) => {
     const wrap = bannerWrapRef.current;
     if (!wrap) return;
 
@@ -135,7 +134,7 @@ export default function InteractiveBanner() {
         },
       }
     );
-  });
+  };
 
   /**
    * Reset tracking when cursor exits the banner
