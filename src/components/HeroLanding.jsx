@@ -307,12 +307,21 @@ export default function HeroLanding() {
           <div className="flex items-center" style={{ gap: '16px', marginTop: '4px' }}>
             <button 
               type="button"
+              onClick={() => {
+                const target = document.querySelector('#services');
+                if (target) {
+                  if (window.__lenis) {
+                    window.__lenis.scrollTo(target, { duration: 1.4, offset: -20 });
+                  } else {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }}
               className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 cursor-pointer pointer-events-auto"
               style={{ padding: '10px 24px' }}
             >
               Explore Showroom
             </button>
-            
           </div>
         </div>
       </div>
@@ -337,12 +346,22 @@ export default function HeroLanding() {
         {/* Subtitle & Buttons */}
         <div style={{ marginTop: '20px' }}>
           <p className="sec2-subtitle-text text-neutral-500 leading-relaxed">
-            camera free campaigns, Virtual talent, Entire worlds crafted around your brand.
+            Camera-free campaigns, virtual talent, and entire worlds crafted around your brand.
           </p>
 
           <div className="sec2-buttons-group flex items-center" style={{ gap: '14px', marginTop: '24px' }}>
             <button 
               type="button"
+              onClick={() => {
+                const target = document.querySelector('#pricing');
+                if (target) {
+                  if (window.__lenis) {
+                    window.__lenis.scrollTo(target, { duration: 1.4, offset: -20 });
+                  } else {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }}
               className="bg-neutral-900 hover:bg-neutral-800 text-white rounded-full text-xs font-semibold tracking-wide transition shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
               style={{
                 paddingTop: '10px',
@@ -355,6 +374,16 @@ export default function HeroLanding() {
             </button>
             <button 
               type="button"
+              onClick={() => {
+                const target = document.querySelector('#services');
+                if (target) {
+                  if (window.__lenis) {
+                    window.__lenis.scrollTo(target, { duration: 1.4, offset: -20 });
+                  } else {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }}
               className="text-neutral-600 hover:text-neutral-900 text-xs font-medium tracking-wide transition hover:underline cursor-pointer"
               style={{
                 paddingTop: '10px',

@@ -43,7 +43,7 @@
     font-size: 0.95rem !important;
     line-height: 1.4 !important;
     max-width: 90vw !important;
-    padding-bottom: 5px;
+    padding-bottom: 6px !important;
   }
 
   .hero-footer-cta {
