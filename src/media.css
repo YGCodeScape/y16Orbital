@@ -253,6 +253,150 @@
     backface-visibility: hidden;
     transform-style: preserve-3d;
   }
+
+  /* --- Section 8: Pricing --- */
+  .sec8-pricing-section {
+    padding-top: 60px !important;
+    padding-bottom: 72px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .sec8-grid-container {
+    gap: 32px !important;
+    margin-bottom: 48px !important;
+  }
+  .sec8-headline {
+    margin-bottom: 20px !important;
+  }
+  .sec8-plan-card {
+    padding: 24px !important;
+  }
+  .sec8-card-label {
+    margin-bottom: 12px !important;
+  }
+  .sec8-card-title {
+    margin-bottom: 8px !important;
+  }
+  .sec8-card-desc {
+    margin-bottom: 20px !important;
+  }
+  .sec8-price-block {
+    padding-top: 8px !important;
+    margin-bottom: 20px !important;
+  }
+  .sec8-starting-label {
+    margin-bottom: 4px !important;
+  }
+  .sec8-price-row {
+    gap: 6px !important;
+  }
+  .sec8-features-list {
+    margin-bottom: 24px !important;
+  }
+  .sec8-features-list > * + * {
+    margin-top: 12px !important;
+  }
+  .sec8-feature-item {
+    gap: 12px !important;
+  }
+  .sec8-card-btn {
+    padding: 12px 20px !important;
+    gap: 8px !important;
+  }
+  .sec8-popular-badge {
+    top: -14px !important;
+    padding: 4px 14px !important;
+  }
+  .sec8-billing-toggle {
+    padding: 4px !important;
+    margin-bottom: 20px !important;
+  }
+  .sec8-toggle-btn {
+    padding: 4px 14px !important;
+  }
+  .sec8-save-pill {
+    padding: 2px 6px !important;
+  }
+  .sec8-savings-text {
+    margin-top: 4px !important;
+  }
+  .sec8-tooltip-trigger {
+    padding: 2px !important;
+  }
+  .sec8-credit-tooltip {
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+    width: 260px !important;
+  }
+  .sec8-campaign-visual-wrap {
+    padding-left: 8px !important;
+  }
+  .sec8-lookbook-badge {
+    bottom: 12px !important;
+    left: 12px !important;
+  }
+  .sec8-bottom-strip {
+    padding: 14px 20px !important;
+    gap: 16px !important;
+  }
+  .sec8-strip-stagger {
+    gap: 16px !important;
+  }
+  .sec8-strip-divider {
+    margin-left: 4px !important;
+  }
+  .sec8-strip-copy {
+    gap: 8px !important;
+  }
+  .sec8-custom-link {
+    gap: 6px !important;
+  }
+  .sec8-see-all-btn {
+    top: 16px !important;
+    right: 16px !important;
+  }
+  .sec8-overlay-body {
+    padding: 20px !important;
+  }
+  .sec8-cards-grid {
+    gap: 24px !important;
+  }
+  .sec8-feature-teaser {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+    padding: 12px !important;
+  }
+  .sec8-overlay-header {
+    padding-bottom: 12px !important;
+  }
+  .sec8-overlay-features {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+  .sec8-overlay-subtitle {
+    margin-bottom: 10px !important;
+  }
+  .sec8-overlay-list {
+    margin-bottom: 0px !important;
+  }
+  .sec8-overlay-list > * + * {
+    margin-top: 8px !important;
+  }
+  .sec8-overlay-terms {
+    padding-top: 8px !important;
+  }
+  .sec8-terms-list > * + * {
+    margin-top: 8px !important;
+  }
+  .sec8-overlay-footer {
+    padding: 16px !important;
+  }
+  .sec8-overlay-close-btn {
+    padding: 10px 16px !important;
+  }
+  .sec8-overlay-return-btn {
+    padding: 10px 16px !important;
+  }
 }
 
 /* ==========================================================================
@@ -461,5 +605,149 @@
     height: 144px !important;
     backface-visibility: hidden;
     transform-style: preserve-3d;
+  }
+
+  /* --- Section 8: Pricing --- */
+  .sec8-pricing-section {
+    padding-top: 100px !important;
+    padding-bottom: 120px !important;
+    padding-left: 48px !important;
+    padding-right: 48px !important;
+  }
+  .sec8-grid-container {
+    gap: 24px !important;
+    margin-bottom: 64px !important;
+  }
+  .sec8-headline {
+    margin-bottom: 24px !important;
+  }
+  .sec8-plan-card {
+    padding: 28px !important;
+  }
+  .sec8-card-label {
+    margin-bottom: 12px !important;
+  }
+  .sec8-card-title {
+    margin-bottom: 8px !important;
+  }
+  .sec8-card-desc {
+    margin-bottom: 24px !important;
+  }
+  .sec8-price-block {
+    padding-top: 8px !important;
+    margin-bottom: 24px !important;
+  }
+  .sec8-starting-label {
+    margin-bottom: 4px !important;
+  }
+  .sec8-price-row {
+    gap: 6px !important;
+  }
+  .sec8-features-list {
+    margin-bottom: 32px !important;
+  }
+  .sec8-features-list > * + * {
+    margin-top: 14px !important;
+  }
+  .sec8-feature-item {
+    gap: 12px !important;
+  }
+  .sec8-card-btn {
+    padding: 12px 20px !important;
+    gap: 8px !important;
+  }
+  .sec8-popular-badge {
+    top: -14px !important;
+    padding: 4px 14px !important;
+  }
+  .sec8-billing-toggle {
+    padding: 4px !important;
+    margin-bottom: 20px !important;
+  }
+  .sec8-toggle-btn {
+    padding: 4px 14px !important;
+  }
+  .sec8-save-pill {
+    padding: 2px 6px !important;
+  }
+  .sec8-savings-text {
+    margin-top: 4px !important;
+  }
+  .sec8-tooltip-trigger {
+    padding: 2px !important;
+  }
+  .sec8-credit-tooltip {
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+    width: 260px !important;
+  }
+  .sec8-campaign-visual-wrap {
+    padding-left: 8px !important;
+  }
+  .sec8-lookbook-badge {
+    bottom: 12px !important;
+    left: 12px !important;
+  }
+  .sec8-bottom-strip {
+    padding: 16px 32px !important;
+    gap: 16px !important;
+  }
+  .sec8-strip-stagger {
+    gap: 20px !important;
+  }
+  .sec8-strip-divider {
+    margin-left: 4px !important;
+  }
+  .sec8-strip-copy {
+    gap: 8px !important;
+  }
+  .sec8-custom-link {
+    gap: 6px !important;
+  }
+  .sec8-see-all-btn {
+    top: 20px !important;
+    right: 20px !important;
+  }
+  .sec8-overlay-body {
+    padding: 28px !important;
+  }
+  .sec8-cards-grid {
+    gap: 24px !important;
+  }
+  .sec8-feature-teaser {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+    padding: 12px !important;
+  }
+  .sec8-overlay-header {
+    padding-bottom: 12px !important;
+  }
+  .sec8-overlay-features {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+  .sec8-overlay-subtitle {
+    margin-bottom: 10px !important;
+  }
+  .sec8-overlay-list {
+    margin-bottom: 0px !important;
+  }
+  .sec8-overlay-list > * + * {
+    margin-top: 8px !important;
+  }
+  .sec8-overlay-terms {
+    padding-top: 8px !important;
+  }
+  .sec8-terms-list > * + * {
+    margin-top: 8px !important;
+  }
+  .sec8-overlay-footer {
+    padding: 16px !important;
+  }
+  .sec8-overlay-close-btn {
+    padding: 10px 16px !important;
+  }
+  .sec8-overlay-return-btn {
+    padding: 10px 16px !important;
   }
 }

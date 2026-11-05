@@ -188,7 +188,7 @@ export default function Section7PerspectiveHero() {
     <section
       ref={containerRef}
       className="sec7-perspective-section relative w-full h-screen overflow-hidden flex items-center justify-center select-none"
-      style={{ perspective: '1200px' }}
+      style={{ perspective: '1200px', marginBottom: '100px', }}
     >
 
       {/* ───────────────────────────────────────────────────────────────── */}
@@ -210,7 +210,7 @@ export default function Section7PerspectiveHero() {
             }}
           >
             {/* Inner wrapper exclusively handles CSS hover to prevent transform collision */}
-            <div className="w-full h-full rounded-2xl overflow-hidden shadow-xl border border-white/80 bg-neutral-900 pointer-events-auto transition-transform duration-300 hover:scale-110 cursor-pointer">
+            <div className="w-full h-full rounded-2xl overflow-hidden shadow-xl border border-white/80 bg-neutral-900 pointer-events-auto transition-transform duration-300">
               <img
                 src={card.img}
                 alt=""
@@ -255,7 +255,7 @@ export default function Section7PerspectiveHero() {
           ref={metadataRef}
           className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between p-3 rounded-2xl bg-black/50 backdrop-blur-md border border-white/15 text-white"
         >
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5" style={{paddingInline: '12px', paddingBlock: '6px' }}>
             <div className="w-8 h-8 rounded-xl bg-orange-500/90 flex items-center justify-center font-bold text-xs uppercase tracking-wider shadow-xs">
               Y16
             </div>
@@ -268,13 +268,10 @@ export default function Section7PerspectiveHero() {
               </span>
             </div>
           </div>
-          <span className="text-[11px] font-medium text-orange-200">
+          <span className="text-[11px] font-medium text-orange-200" style={{paddingRight: '20px'}}>
             01 // Production
           </span>
         </div>
-
-        {/* Subtle Vignette Gradient for Depth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
       </div>
     </section>
   );
