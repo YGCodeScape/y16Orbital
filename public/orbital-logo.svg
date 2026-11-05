@@ -1,4 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#E8590C" stroke-width="2.2" stroke-linecap="butt" stroke-linejoin="miter">
-  <path d="M 11.5 4.5 A 7.5 7.5 0 1 0 19 12" />
-  <circle cx="17.2" cy="6.3" r="2.0" fill="none" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 42" fill="none">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=K2D:wght@700&amp;display=swap');
+    .wm-text { font-family: 'K2D', 'Arial Black', sans-serif; font-weight: 700; fill: #111111; letter-spacing: 0.24em; font-size: 21px; }
+    .wm-icon { stroke: #111111; stroke-width: 2.4; stroke-linecap: butt; fill: none; }
+    @media (prefers-color-scheme: dark) {
+      .wm-text { fill: #f5f5f5; }
+      .wm-icon { stroke: #f5f5f5; }
+    }
+  </style>
+  <!-- Y16 -->
+  <text x="4" y="28" class="wm-text">Y16</text>
+  <!-- Orbital geometric icon in place of O -->
+  <g transform="translate(74, 11)">
+    <path d="M 10.5 3.5 A 8 8 0 1 0 18.5 11.5" class="wm-icon" />
+    <circle cx="16.5" cy="5.2" r="2.1" class="wm-icon" />
+  </g>
+  <!-- RBITAL -->
+  <text x="103" y="28" class="wm-text">RBITAL</text>
 </svg>

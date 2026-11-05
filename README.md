@@ -1,13 +1,14 @@
 <div align="center">
 
-  <img src="./public/orbital-logo.svg" alt="Y16Orbital Logo" width="56" height="56" />
-  <br />
+  <a href="https://y16orbital.vercel.app/">
+    <img src="./public/orbital-logo.svg" alt="Y16ORBITAL Wordmark" width="280" />
+  </a>
 
-  <img src="./public/bannersec/landingSS.png" alt="Y16Orbital Landing Showcase" width="100%" style="border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);" />
+  <br /><br />
 
-  # Y16ORBITAL
-  
   **AI-Powered Creative Production Studio — Built for the Next Generation of Advertising.**
+
+  <br /><br />
 
   [![Live Demo](https://img.shields.io/badge/Demo-y16orbital.vercel.app-E8590C?style=for-the-badge&logo=vercel&logoColor=white)](https://y16orbital.vercel.app/)
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
@@ -16,11 +17,17 @@
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
   [![Lenis](https://img.shields.io/badge/Lenis-Smooth_Scroll-000000?style=for-the-badge)](https://lenis.darkroom.engineering/)
 
-  <br />
+  <br /><br />
 
   <p align="center">
     <a href="https://y16orbital.vercel.app/"><strong>Explore the Live Experience →</strong></a>
   </p>
+
+  <br />
+
+  <a href="https://y16orbital.vercel.app/">
+    <img src="./public/bannersec/landingSS.png" alt="Y16Orbital Landing Showcase" width="100%" style="border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);" />
+  </a>
 
 </div>
 
